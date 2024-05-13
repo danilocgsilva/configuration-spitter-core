@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Danilocgsilva\ConfigurationSpitter\Receipt;
-use Danilocgsilva\ConfigurationSpitter\DockerFile;
-use Danilocgsilva\ConfigurationSpitter\DockerCompose;
+use Danilocgsilva\ConfigurationSpitter\Receipt\Receipt;
+use Danilocgsilva\ConfigurationSpitter\Receipt\DockerFile;
+use Danilocgsilva\ConfigurationSpitter\Receipt\DockerCompose;
 
 class ReceiptTest extends TestCase
 {

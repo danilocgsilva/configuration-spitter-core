@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Unit;
 
-use Danilocgsilva\ConfigurationSpitter\DockerCompose;
+use Danilocgsilva\ConfigurationSpitter\Receipt\DockerCompose;
 use PHPUnit\Framework\TestCase;
 
 class DockerComposeTest extends TestCase

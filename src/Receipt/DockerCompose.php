@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Danilocgsilva\ConfigurationSpitter;
+namespace Danilocgsilva\ConfigurationSpitter\Receipt;
 
 class DockerCompose implements SpitterInterface
 {

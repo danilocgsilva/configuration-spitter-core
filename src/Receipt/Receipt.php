@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Danilocgsilva\ConfigurationSpitter;
+namespace Danilocgsilva\ConfigurationSpitter\Receipt;
 
-use Danilocgsilva\ConfigurationSpitter\DockerFile;
-use Danilocgsilva\ConfigurationSpitter\DockerCompose;
+use Danilocgsilva\ConfigurationSpitter\Receipt\DockerFile;
+use Danilocgsilva\ConfigurationSpitter\Receipt\DockerCompose;
 
 class Receipt
 {

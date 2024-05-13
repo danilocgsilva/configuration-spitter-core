@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Unit;
 
-use Danilocgsilva\ConfigurationSpitter\DockerFile;
+use Danilocgsilva\ConfigurationSpitter\Receipt\DockerFile;
 use PHPUnit\Framework\TestCase;
 
 class DockerFileTest extends TestCase
