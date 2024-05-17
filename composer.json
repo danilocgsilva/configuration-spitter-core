@@ -1,5 +1,6 @@
 {
     "name": "danilocgsilva/configuration_spitter",
+    "description": "Returns receipts or configuration script",
     "type": "library",
     "autoload": {
         "psr-4": {
@@ -17,6 +18,9 @@
             "email": "contact@danilocgsilva.me"
         }
     ],
+    "require": {
+        "php": ">=8.2"
+    },
     "require-dev": {
         "phpunit/phpunit": "^11.1"
     }
