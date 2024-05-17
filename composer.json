@@ -1,6 +1,7 @@
 {
     "name": "danilocgsilva/configuration_spitter",
     "type": "library",
+    "description": "Generates a server receipt automatically",
     "autoload": {
         "psr-4": {
             "Danilocgsilva\\ConfigurationSpitter\\": "src/"
@@ -17,6 +18,9 @@
             "email": "contact@danilocgsilva.me"
         }
     ],
+    "require": {
+        "php": ">=8.2"
+    },
     "require-dev": {
         "phpunit/phpunit": "^11.1"
     }
