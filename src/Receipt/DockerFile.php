@@ -38,4 +38,9 @@ class DockerFile implements SpitterInterface
         $this->upgrade = true;
         return $this;
     }
+
+    public function explain(): string
+    {
+        return "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholser";
+    }
 }

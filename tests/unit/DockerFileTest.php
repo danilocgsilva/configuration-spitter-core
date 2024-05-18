@@ -9,6 +9,13 @@ use PHPUnit\Framework\TestCase;
 
 class DockerFileTest extends TestCase
 {
+    private DockerFile $dockerFile;
+
+    public function setUp(): void
+    {
+        $this->dockerFile = new DockerFile();
+    }
+    
     public function testGetString(): void
     {
         $expectedString = <<<EOF
@@ -16,9 +23,7 @@ FROM debian:bookworm-slim
 
 CMD while : ; do sleep 1000; done
 EOF;
-        $dockerFile = new DockerFile();
-
-        $this->assertSame($expectedString, $dockerFile->getString());
+        $this->assertSame($expectedString, $this->dockerFile->getString());
     }
 
     public function testWithUpdate(): void
@@ -30,10 +35,9 @@ RUN apt-get update
 
 CMD while : ; do sleep 1000; done
 EOF;
-        $dockerFile = new DockerFile();
-        $dockerFile->setUpdate();
+        $this->dockerFile->setUpdate();
 
-        $this->assertSame($expectedString, $dockerFile->getString());
+        $this->assertSame($expectedString, $this->dockerFile->getString());
     }
 
     public function testWithUpdateAndUpgrade(): void
@@ -46,9 +50,14 @@ RUN apt-get upgrade -y
 
 CMD while : ; do sleep 1000; done
 EOF;
-                $dockerFile = new DockerFile();
-                $dockerFile->setUpdate()->setUpgrade();
+        $this->dockerFile->setUpdate()->setUpgrade();
         
-                $this->assertSame($expectedString, $dockerFile->getString());
+        $this->assertSame($expectedString, $this->dockerFile->getString());
+    }
+
+    public function testExplain(): void
+    {
+        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholser";
+        $this->assertSame($expectedExplanation, $this->dockerFile->explain());
     }
 }
