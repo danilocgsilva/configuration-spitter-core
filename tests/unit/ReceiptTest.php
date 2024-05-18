@@ -31,5 +31,12 @@ class ReceiptTest extends TestCase
             $dockerCompose->getString(),
             $receiptData['docker-compose.yml']
         );
-    }    
+    }
+
+    public function testExplain(): void
+    {
+        $receipt = new Receipt();
+        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholser";
+        $this->assertSame($expectedExplanation, $receipt->explain());
+    }
 }

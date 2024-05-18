@@ -26,4 +26,10 @@ class Receipt
             "DockerFile" => $dockerFile->getString()
         ];
     }
+
+    public function explain(): string
+    {
+        $dockerFile = new DockerFile();
+        return $dockerFile->explain();
+    }
 }
