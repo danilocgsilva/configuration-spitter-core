@@ -13,6 +13,12 @@ class Receipt
 
     private DockerCompose $dockerCompose;
 
+    const PARAMETERS = [
+        "update",
+        "upgrade",
+        "add-maria-db-client-with-password"
+    ];
+
     public function __construct()
     {
         $this->dockerCompose = new DockerCompose();
@@ -60,5 +66,10 @@ class Receipt
     public function getDockerComposeObject(): DockerCompose
     {
         return $this->dockerCompose;
+    }
+
+    public function getParameters(): array
+    {
+        return self::PARAMETERS;
     }
 }
