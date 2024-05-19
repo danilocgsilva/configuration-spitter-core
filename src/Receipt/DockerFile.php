@@ -56,6 +56,9 @@ class DockerFile implements SpitterInterface
         if ($this->update) {
             $baseExplainString .= "\nIt also perform an update in the operational system repository, so packages can be installed through default operating system utility.";
         }
+        if ($this->upgrade) {
+            $baseExplainString .= "\nWill update operating system packages.";   
+        }
         
         return $baseExplainString;
     }

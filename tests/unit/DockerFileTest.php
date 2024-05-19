@@ -69,6 +69,15 @@ EOF;
         $this->assertSame($expectedExplanation, $this->dockerFile->explain());
     }
 
+    public function testExplainWithUpgrade(): void
+    {
+        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
+        $expectedExplanation .= "Will update operating system packages.";
+
+        $this->dockerFile->setUpgrade();
+        $this->assertSame($expectedExplanation, $this->dockerFile->explain());
+    }
+
     public function testMariadbClient(): void
     {
         $expectedString = <<<EOF

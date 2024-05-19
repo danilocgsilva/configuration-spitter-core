@@ -51,6 +51,16 @@ class ReceiptTest extends TestCase
         $this->assertSame($expectedExplanation, $receipt->explain());
     }
 
+    public function testExplainWithUpgrade(): void
+    {
+        $receipt = new Receipt();
+
+        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
+        $expectedExplanation .= "Will update operating system packages.";
+
+        $receipt->setProperty("upgrade");
+        $this->assertSame($expectedExplanation, $receipt->explain());
+    }
 
     public function testPropertyassigment(): void
     {
