@@ -60,4 +60,23 @@ EOF;
         $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholser";
         $this->assertSame($expectedExplanation, $this->dockerFile->explain());
     }
+
+    public function testMariadbClient(): void
+    {
+        $expectedString = <<<EOF
+FROM debian:bookworm-slim
+
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install mariadb-client -y
+
+CMD while : ; do sleep 1000; done
+EOF;
+        $this->dockerFile
+            ->setUpdate()
+            ->setUpgrade()
+            ->setMariadbClient();
+
+        $this->assertSame($expectedString, $this->dockerFile->getString());
+    }
 }

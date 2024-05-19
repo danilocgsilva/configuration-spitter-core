@@ -27,6 +27,14 @@ class Receipt
         if ($property === "upgrade") {
             $this->dockerFile->setUpgrade();
         }
+        $parametedPropertySections = explode(":", $property);
+        if (count($parametedPropertySections) === 2) {
+            $parameter = $parametedPropertySections[0];
+            $password = $parametedPropertySections[1];
+            if ($parameter === "add-maria-db-client-with-password") {
+                $this->dockerCompose->setMariaDb($password);
+            }
+        }
         return $this;
     }
     
@@ -47,5 +55,10 @@ class Receipt
     public function getDockerFileObject(): DockerFile
     {
         return $this->dockerFile;
+    }
+
+    public function getDockerComposeObject(): DockerCompose
+    {
+        return $this->dockerCompose;
     }
 }

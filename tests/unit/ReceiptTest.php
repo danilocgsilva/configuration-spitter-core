@@ -60,4 +60,25 @@ EOF;
 
         $this->assertSame($expectedString, $dockerFile->getString());
     }
+
+    public function testSetMariaDb(): void
+    {
+        $receipt = new Receipt();
+        $receipt->setProperty("add-maria-db-client-with-password:themariadbpassword");
+        $dockerCompose = $receipt->getDockerComposeObject();
+        $expectedString = <<<EOF
+services:
+  env:
+    build:
+      context: .
+    links:
+      - mariadb
+  mariadb:
+    image: mariadb:latest
+    environment:
+      MARIADB_ROOT_PASSWORD: "themariadbpassword"
+EOF;
+
+        $this->assertSame($expectedString, $dockerCompose->getString());
+    }
 }
