@@ -57,7 +57,15 @@ EOF;
 
     public function testExplain(): void
     {
-        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholser";
+        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.";
+        $this->assertSame($expectedExplanation, $this->dockerFile->explain());
+    }
+
+    public function testExplainWithUpdate(): void
+    {
+        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
+        $expectedExplanation .= "It also perform an update in the operational system repository, so packages can be installed through default operating system utility.";
+        $this->dockerFile->setUpdate();
         $this->assertSame($expectedExplanation, $this->dockerFile->explain());
     }
 

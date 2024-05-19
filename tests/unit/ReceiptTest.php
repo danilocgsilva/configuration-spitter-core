@@ -36,9 +36,21 @@ class ReceiptTest extends TestCase
     public function testExplain(): void
     {
         $receipt = new Receipt();
-        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholser";
+        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.";
         $this->assertSame($expectedExplanation, $receipt->explain());
     }
+
+    public function testExplainWithUpdate(): void
+    {
+        $receipt = new Receipt();
+
+        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
+        $expectedExplanation .= "It also perform an update in the operational system repository, so packages can be installed through default operating system utility.";
+
+        $receipt->setProperty("update");
+        $this->assertSame($expectedExplanation, $receipt->explain());
+    }
+
 
     public function testPropertyassigment(): void
     {

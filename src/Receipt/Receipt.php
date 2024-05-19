@@ -54,8 +54,7 @@ class Receipt
 
     public function explain(): string
     {
-        $dockerFile = new DockerFile();
-        return $dockerFile->explain();
+        return $this->dockerFile->explain();
     }
 
     public function getDockerFileObject(): DockerFile
