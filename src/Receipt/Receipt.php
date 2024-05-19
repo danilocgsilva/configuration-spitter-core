@@ -9,21 +9,32 @@ use Danilocgsilva\ConfigurationSpitter\Receipt\DockerCompose;
 
 class Receipt
 {
-    private array $services = [];
-    
-    public function set(string $service): void
+    private DockerFile $dockerFile;
+
+    private DockerCompose $dockerCompose;
+
+    public function __construct()
     {
-        $this->services[] = $service;
+        $this->dockerCompose = new DockerCompose();
+        $this->dockerFile = new DockerFile();
+    }
+    
+    public function setProperty(string $property): self
+    {
+        if ($property === "update") {
+            $this->dockerFile->setUpdate();
+        }
+        if ($property === "upgrade") {
+            $this->dockerFile->setUpgrade();
+        }
+        return $this;
     }
     
     public function get(): array
     {
-        $dockerComposer = new DockerCompose();
-        $dockerFile = new DockerFile();
-        
         return [
-            "docker-compose.yml" => $dockerComposer->getString(),
-            "DockerFile" => $dockerFile->getString()
+            "docker-compose.yml" => $this->dockerCompose->getString(),
+            "DockerFile" => $this->dockerFile->getString()
         ];
     }
 
@@ -31,5 +42,10 @@ class Receipt
     {
         $dockerFile = new DockerFile();
         return $dockerFile->explain();
+    }
+
+    public function getDockerFileObject(): DockerFile
+    {
+        return $this->dockerFile;
     }
 }
