@@ -97,7 +97,7 @@ services:
   mariadb:
     image: 'mariadb:latest'
     environment:
-      MARIADB_ROOT_PASSWORD: 'themariadbpassword'
+      MARIADB_ROOT_PASSWORD: themariadbpassword
 
 EOF;
 

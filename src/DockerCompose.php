@@ -10,30 +10,27 @@ use Symfony\Component\Yaml\Yaml;
 
 class DockerCompose implements SpitterInterface
 {
-    private string $mariaDbPassword = "";
+    private array $dataArray = [];
 
-    public function getString(): string
+    public function __construct()
     {
-        $baseData = [
+        $this->dataArray = [
             'services' => [
                 'env' => (new DebianServiceData())->getData()
             ]
         ];
+    }
 
-        if ($this->mariaDbPassword !== "") {
-            $baseData['services']['env']['links'] = ['mariadb'];
-            $baseData['services']['mariadb'] = (new MariadbServiceData())->getData();
-            
-            $baseString = Yaml::dump($baseData, 5, 2);
-            return sprintf($baseString, $this->mariaDbPassword);
-        }
-
-        return Yaml::dump($baseData, 5, 2);
+    public function getString(): string
+    {
+        return Yaml::dump($this->dataArray, 5, 2);
     }
 
     public function setMariaDb(string $rootPassword): self
     {
-        $this->mariaDbPassword = $rootPassword;
+        $this->dataArray['services']['env']['links'] = ['mariadb'];
+        $this->dataArray['services']['mariadb'] = (new MariadbServiceData())->getData();
+        $this->dataArray['services']['mariadb']['environment']['MARIADB_ROOT_PASSWORD'] = $rootPassword;
 
         return $this;
     }

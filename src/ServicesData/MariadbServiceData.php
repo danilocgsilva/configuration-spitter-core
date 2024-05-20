@@ -11,7 +11,7 @@ class MariadbServiceData implements ServiceDataInterface
         return [
             'image' => 'mariadb:latest',
             'environment' => [
-                'MARIADB_ROOT_PASSWORD' => '%s'
+                'MARIADB_ROOT_PASSWORD' => ''
             ]
         ];
     }

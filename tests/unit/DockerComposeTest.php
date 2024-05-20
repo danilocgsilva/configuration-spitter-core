@@ -38,7 +38,7 @@ services:
   mariadb:
     image: 'mariadb:latest'
     environment:
-      MARIADB_ROOT_PASSWORD: 'mySuperSecurePassword'
+      MARIADB_ROOT_PASSWORD: mySuperSecurePassword
 
 EOF;
 
