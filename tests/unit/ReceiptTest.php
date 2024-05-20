@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Danilocgsilva\ConfigurationSpitter\Receipt\Receipt;
 use Danilocgsilva\ConfigurationSpitter\Receipt\DockerFile;
 use Danilocgsilva\ConfigurationSpitter\Receipt\DockerCompose;
+use Exception;
 
 class ReceiptTest extends TestCase
 {
@@ -102,5 +103,12 @@ services:
 EOF;
 
         $this->assertSame($expectedString, $dockerCompose->getString());
+    }
+
+    public function testAddingNotExistingParameter(): void
+    {
+        $this->expectException(Exception::class);
+        $receipt = new Receipt();
+        $receipt->setProperty("ThisPropertyDoesNotExists");
     }
 }

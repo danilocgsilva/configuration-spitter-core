@@ -6,6 +6,7 @@ namespace Danilocgsilva\ConfigurationSpitter\Receipt;
 
 use Danilocgsilva\ConfigurationSpitter\Receipt\DockerFile;
 use Danilocgsilva\ConfigurationSpitter\Receipt\DockerCompose;
+use Exception;
 
 class Receipt
 {
@@ -25,18 +26,22 @@ class Receipt
         $this->dockerFile = new DockerFile();
     }
     
-    public function setProperty(string $property): self
+    public function setProperty(string $propertyWithParameter): self
     {
+        $propertyWithParameterArray = explode(":", $propertyWithParameter);
+        $property = $propertyWithParameterArray[0];
+        if (!in_array($property, self::PARAMETERS)) {
+            throw new Exception("The given property is not expected to be received.");
+        }
         if ($property === "update") {
             $this->dockerFile->setUpdate();
         }
         if ($property === "upgrade") {
             $this->dockerFile->setUpgrade();
         }
-        $parametedPropertySections = explode(":", $property);
-        if (count($parametedPropertySections) === 2) {
-            $parameter = $parametedPropertySections[0];
-            $password = $parametedPropertySections[1];
+        if (count($propertyWithParameterArray) === 2) {
+            $parameter = $propertyWithParameterArray[0];
+            $password = $propertyWithParameterArray[1];
             if ($parameter === "add-maria-db-client-with-password") {
                 $this->dockerCompose->setMariaDb($password);
             }
