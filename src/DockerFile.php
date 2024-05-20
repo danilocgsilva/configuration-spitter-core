@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Danilocgsilva\ConfigurationSpitter\Receipt;
+namespace Danilocgsilva\ConfigurationSpitter;
 
 class DockerFile implements SpitterInterface
 {

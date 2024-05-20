@@ -4,22 +4,27 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
+use Danilocgsilva\ConfigurationSpitter\Receipt\DebianReceipt;
 use PHPUnit\Framework\TestCase;
-use Danilocgsilva\ConfigurationSpitter\Receipt\Receipt;
-use Danilocgsilva\ConfigurationSpitter\Receipt\DockerFile;
-use Danilocgsilva\ConfigurationSpitter\Receipt\DockerCompose;
+use Danilocgsilva\ConfigurationSpitter\DockerFile;
+use Danilocgsilva\ConfigurationSpitter\DockerCompose;
 use Exception;
 
-class ReceiptTest extends TestCase
+class DebianReceiptTest extends TestCase
 {
+    private DebianReceipt $debianReceipt;
+
+    public function setUp(): void
+    {
+        $this->debianReceipt = new DebianReceipt();
+    }
+    
     public function testGet(): void
     {
-        $receipt = new Receipt();
         $dockerFile = new DockerFile();
         $dockerCompose = new DockerCompose();
 
-        $receipt = new Receipt();
-        $receiptData = $receipt->get();
+        $receiptData = $this->debianReceipt->get();
 
         $this->assertCount(2, $receiptData);
 
@@ -36,41 +41,35 @@ class ReceiptTest extends TestCase
 
     public function testExplain(): void
     {
-        $receipt = new Receipt();
         $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.";
-        $this->assertSame($expectedExplanation, $receipt->explain());
+        $this->assertSame($expectedExplanation, $this->debianReceipt->explain());
     }
 
     public function testExplainWithUpdate(): void
     {
-        $receipt = new Receipt();
-
         $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
         $expectedExplanation .= "It also perform an update in the operational system repository, so packages can be installed through default operating system utility.";
 
-        $receipt->setProperty("update");
-        $this->assertSame($expectedExplanation, $receipt->explain());
+        $this->debianReceipt->setProperty("update");
+        $this->assertSame($expectedExplanation, $this->debianReceipt->explain());
     }
 
     public function testExplainWithUpgrade(): void
     {
-        $receipt = new Receipt();
-
         $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
         $expectedExplanation .= "Will update operating system packages.";
 
-        $receipt->setProperty("upgrade");
-        $this->assertSame($expectedExplanation, $receipt->explain());
+        $this->debianReceipt->setProperty("upgrade");
+        $this->assertSame($expectedExplanation, $this->debianReceipt->explain());
     }
 
     public function testPropertyassigment(): void
     {
-        $receipt = new Receipt();
-        $receipt
+        $this->debianReceipt
             ->setProperty("update")
             ->setProperty("upgrade");
 
-        $dockerFile = $receipt->getDockerFileObject();
+        $dockerFile = $this->debianReceipt->getDockerFileObject();
 
         $expectedString = <<<EOF
 FROM debian:bookworm-slim
@@ -86,9 +85,8 @@ EOF;
 
     public function testSetMariaDb(): void
     {
-        $receipt = new Receipt();
-        $receipt->setProperty("add-maria-db-client-with-password:themariadbpassword");
-        $dockerCompose = $receipt->getDockerComposeObject();
+        $this->debianReceipt->setProperty("add-maria-db-client-with-password:themariadbpassword");
+        $dockerCompose = $this->debianReceipt->getDockerComposeObject();
         $expectedString = <<<EOF
 services:
   env:
@@ -109,7 +107,6 @@ EOF;
     public function testAddingNotExistingParameter(): void
     {
         $this->expectException(Exception::class);
-        $receipt = new Receipt();
-        $receipt->setProperty("ThisPropertyDoesNotExists");
+        $this->debianReceipt->setProperty("ThisPropertyDoesNotExists");
     }
 }

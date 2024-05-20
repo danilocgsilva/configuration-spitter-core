@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Danilocgsilva\ConfigurationSpitter\Receipt;
+namespace Danilocgsilva\ConfigurationSpitter;
 
+use Danilocgsilva\ConfigurationSpitter\ServicesData\DebianServiceData;
+use Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData;
 use Symfony\Component\Yaml\Yaml;
 
 class DockerCompose implements SpitterInterface
@@ -14,22 +16,13 @@ class DockerCompose implements SpitterInterface
     {
         $baseData = [
             'services' => [
-                'env' => [
-                    'build' => [
-                        'context' => '.'
-                    ]
-                ]
+                'env' => (new DebianServiceData())->getData()
             ]
         ];
 
         if ($this->mariaDbPassword !== "") {
             $baseData['services']['env']['links'] = ['mariadb'];
-            $baseData['services']['mariadb'] = [
-                'image' => 'mariadb:latest',
-                'environment' => [
-                    'MARIADB_ROOT_PASSWORD' => '%s'
-                ]
-            ];
+            $baseData['services']['mariadb'] = (new MariadbServiceData())->getData();
             
             $baseString = Yaml::dump($baseData, 5, 2);
             return sprintf($baseString, $this->mariaDbPassword);

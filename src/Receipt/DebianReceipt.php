@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Danilocgsilva\ConfigurationSpitter\Receipt;
 
-use Danilocgsilva\ConfigurationSpitter\Receipt\DockerFile;
-use Danilocgsilva\ConfigurationSpitter\Receipt\DockerCompose;
+use Danilocgsilva\ConfigurationSpitter\DockerFile;
+use Danilocgsilva\ConfigurationSpitter\DockerCompose;
 use Exception;
 
-class Receipt
+class DebianReceipt
 {
     private DockerFile $dockerFile;
 

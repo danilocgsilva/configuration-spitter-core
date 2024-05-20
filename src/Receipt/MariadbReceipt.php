@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Danilocgsilva\ConfigurationSpitter\Receipt;
 
-interface SpitterInterface
+class MariadbReceipt
 {
-    public function getString(): string;
+    
 }
