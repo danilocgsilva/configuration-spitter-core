@@ -12,44 +12,30 @@ class DockerCompose implements SpitterInterface
 
     public function getString(): string
     {
-        if ($this->mariaDbPassword !== "") {
-            $data = [
-                'services' => [
-                    'env' => [
-                        'build' => [
-                            'context' => '.'
-                        ],
-                        'links' => [
-                            'mariadb'
-                        ]
-                    ],
-                    'mariadb' => [
-                        'image' => 'mariadb:latest',
-                        'environment' => [
-                            'MARIADB_ROOT_PASSWORD' => '%s'
-                        ]
+        $baseData = [
+            'services' => [
+                'env' => [
+                    'build' => [
+                        'context' => '.'
                     ]
+                ]
+            ]
+        ];
+
+        if ($this->mariaDbPassword !== "") {
+            $baseData['services']['env']['links'] = ['mariadb'];
+            $baseData['services']['mariadb'] = [
+                'image' => 'mariadb:latest',
+                'environment' => [
+                    'MARIADB_ROOT_PASSWORD' => '%s'
                 ]
             ];
             
-            $baseString = Yaml::dump($data, 5, 2);
-            $expectedString = sprintf($baseString, $this->mariaDbPassword);
-        } else {
-            $data = [
-                'services' => [
-                    'env' => [
-                        'build' => [
-                            'context' => '.'
-                        ]
-                    ]
-                ]
-            ];
-
-            $expectedString = Yaml::dump($data, 5, 2);
+            $baseString = Yaml::dump($baseData, 5, 2);
+            return sprintf($baseString, $this->mariaDbPassword);
         }
 
-
-        return $expectedString;
+        return Yaml::dump($baseData, 5, 2);
     }
 
     public function setMariaDb(string $rootPassword): self
