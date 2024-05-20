@@ -8,7 +8,7 @@ use Danilocgsilva\ConfigurationSpitter\DockerFile;
 use Danilocgsilva\ConfigurationSpitter\DockerCompose;
 use Exception;
 
-class DebianReceipt
+class DebianReceipt implements ReceiptInterface
 {
     private DockerFile $dockerFile;
 
