@@ -16,6 +16,7 @@ services:
   env:
     build:
       context: .
+
 EOF;
         $dockerCompose = new DockerCompose();
 
@@ -35,9 +36,10 @@ services:
     links:
       - mariadb
   mariadb:
-    image: mariadb:latest
+    image: 'mariadb:latest'
     environment:
-      MARIADB_ROOT_PASSWORD: "mySuperSecurePassword"
+      MARIADB_ROOT_PASSWORD: 'mySuperSecurePassword'
+
 EOF;
 
         $this->assertSame($expectedString, $dockerCompose->getString());
@@ -56,9 +58,10 @@ services:
     links:
       - mariadb
   mariadb:
-    image: mariadb:latest
+    image: 'mariadb:latest'
     environment:
-      MARIADB_ROOT_PASSWORD: "anotherSecure%$#password"
+      MARIADB_ROOT_PASSWORD: 'anotherSecure%$#password'
+
 EOF;
 
         $this->assertSame($expectedString, $dockerCompose->getString());

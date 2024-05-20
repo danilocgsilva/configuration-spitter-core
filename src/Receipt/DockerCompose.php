@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Danilocgsilva\ConfigurationSpitter\Receipt;
 
+use Symfony\Component\Yaml\Yaml;
+
 class DockerCompose implements SpitterInterface
 {
     private string $mariaDbPassword = "";
@@ -11,28 +13,42 @@ class DockerCompose implements SpitterInterface
     public function getString(): string
     {
         if ($this->mariaDbPassword !== "") {
-            $baseString = <<<EOF
-services:
-  env:
-    build:
-      context: .
-    links:
-      - mariadb
-  mariadb:
-    image: mariadb:latest
-    environment:
-      MARIADB_ROOT_PASSWORD: "%s"
-EOF;
+            $data = [
+                'services' => [
+                    'env' => [
+                        'build' => [
+                            'context' => '.'
+                        ],
+                        'links' => [
+                            'mariadb'
+                        ]
+                    ],
+                    'mariadb' => [
+                        'image' => 'mariadb:latest',
+                        'environment' => [
+                            'MARIADB_ROOT_PASSWORD' => '%s'
+                        ]
+                    ]
+                ]
+            ];
+            
+            $baseString = Yaml::dump($data, 5, 2);
             $expectedString = sprintf($baseString, $this->mariaDbPassword);
         } else {
-            $expectedString = <<<EOF
-services:
-  env:
-    build:
-      context: .
-EOF;
+            $data = [
+                'services' => [
+                    'env' => [
+                        'build' => [
+                            'context' => '.'
+                        ]
+                    ]
+                ]
+            ];
+
+            $expectedString = Yaml::dump($data, 5, 2);
         }
-        
+
+
         return $expectedString;
     }
 
