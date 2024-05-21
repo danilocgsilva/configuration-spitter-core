@@ -24,7 +24,7 @@ class DebianReceipt implements ReceiptInterface
     public function __construct()
     {
         $this->dockerCompose = new DockerCompose();
-        $this->dockerCompose->setServiceData(new DebianServiceData());
+        $this->dockerCompose->setServiceData(new DebianServiceData(), 'env');
         $this->dockerFile = new DockerFile();
     }
     

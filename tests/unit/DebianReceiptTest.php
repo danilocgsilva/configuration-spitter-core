@@ -24,7 +24,7 @@ class DebianReceiptTest extends TestCase
     {
         $dockerFile = new DockerFile();
         $dockerCompose = new DockerCompose();
-        $dockerCompose->setServiceData(new DebianServiceData());
+        $dockerCompose->setServiceData(new DebianServiceData(), 'env');
 
         $receiptData = $this->debianReceipt->get();
 

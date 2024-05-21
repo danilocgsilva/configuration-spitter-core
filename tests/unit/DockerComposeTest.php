@@ -6,6 +6,7 @@ namespace Tests\Unit;
 
 use Danilocgsilva\ConfigurationSpitter\DockerCompose;
 use Danilocgsilva\ConfigurationSpitter\ServicesData\DebianServiceData;
+use Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData;
 use PHPUnit\Framework\TestCase;
 
 class DockerComposeTest extends TestCase
@@ -20,7 +21,7 @@ services:
 
 EOF;
         $dockerCompose = new DockerCompose();
-        $dockerCompose->setServiceData(new DebianServiceData());
+        $dockerCompose->setServiceData(new DebianServiceData(), 'env');
 
         $this->assertSame($expectedString, $dockerCompose->getString());
     }
@@ -28,7 +29,7 @@ EOF;
     public function testGetStringWithMariaDb(): void
     {
         $dockerCompose = new DockerCompose();
-        $dockerCompose->setServiceData(new DebianServiceData());
+        $dockerCompose->setServiceData(new DebianServiceData(), 'env');
         $dockerCompose->setMariaDb("mySuperSecurePassword");
       
         $expectedString = <<<EOF
@@ -51,7 +52,7 @@ EOF;
     public function testGetStringWithMariaDb2(): void
     {
         $dockerCompose = new DockerCompose();
-        $dockerCompose->setServiceData(new DebianServiceData());
+        $dockerCompose->setServiceData(new DebianServiceData(), 'env');
         $dockerCompose->setMariaDb("anotherSecure%$#password");
       
         $expectedString = <<<EOF
@@ -65,6 +66,22 @@ services:
     image: 'mariadb:latest'
     environment:
       MARIADB_ROOT_PASSWORD: 'anotherSecure%$#password'
+
+EOF;
+
+        $this->assertSame($expectedString, $dockerCompose->getString());
+    }
+
+    public function testGetStringForDatabase(): void
+    {
+        $dockerCompose = new DockerCompose();
+        $dockerCompose->setServiceData(new MariadbServiceData(), 'mariadb');
+        $expectedString = <<<EOF
+services:
+  mariadb:
+    image: 'mariadb:latest'
+    environment:
+      MARIADB_ROOT_PASSWORD: ''
 
 EOF;
 

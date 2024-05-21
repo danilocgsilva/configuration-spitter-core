@@ -13,11 +13,11 @@ class DockerCompose implements SpitterInterface
 {
     private array $dataArray = [];
 
-    public function setServiceData(ServiceDataInterface $serviceData)
+    public function setServiceData(ServiceDataInterface $serviceData, string $serviceName)
     {
         $this->dataArray = [
             'services' => [
-                'env' => $serviceData->getData()
+                $serviceName => $serviceData->getData()
             ]
         ];
     }
