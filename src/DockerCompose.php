@@ -6,17 +6,18 @@ namespace Danilocgsilva\ConfigurationSpitter;
 
 use Danilocgsilva\ConfigurationSpitter\ServicesData\DebianServiceData;
 use Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData;
+use Danilocgsilva\ConfigurationSpitter\ServicesData\ServiceDataInterface;
 use Symfony\Component\Yaml\Yaml;
 
 class DockerCompose implements SpitterInterface
 {
     private array $dataArray = [];
 
-    public function __construct()
+    public function setServiceData(ServiceDataInterface $serviceData)
     {
         $this->dataArray = [
             'services' => [
-                'env' => (new DebianServiceData())->getData()
+                'env' => $serviceData->getData()
             ]
         ];
     }

@@ -6,6 +6,7 @@ namespace Danilocgsilva\ConfigurationSpitter\Receipt;
 
 use Danilocgsilva\ConfigurationSpitter\DockerFile;
 use Danilocgsilva\ConfigurationSpitter\DockerCompose;
+use Danilocgsilva\ConfigurationSpitter\ServicesData\DebianServiceData;
 use Exception;
 
 class DebianReceipt implements ReceiptInterface
@@ -23,6 +24,7 @@ class DebianReceipt implements ReceiptInterface
     public function __construct()
     {
         $this->dockerCompose = new DockerCompose();
+        $this->dockerCompose->setServiceData(new DebianServiceData());
         $this->dockerFile = new DockerFile();
     }
     

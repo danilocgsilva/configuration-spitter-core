@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use Danilocgsilva\ConfigurationSpitter\DockerCompose;
+use Danilocgsilva\ConfigurationSpitter\ServicesData\DebianServiceData;
 use PHPUnit\Framework\TestCase;
 
 class DockerComposeTest extends TestCase
@@ -19,6 +20,7 @@ services:
 
 EOF;
         $dockerCompose = new DockerCompose();
+        $dockerCompose->setServiceData(new DebianServiceData());
 
         $this->assertSame($expectedString, $dockerCompose->getString());
     }
@@ -26,6 +28,7 @@ EOF;
     public function testGetStringWithMariaDb(): void
     {
         $dockerCompose = new DockerCompose();
+        $dockerCompose->setServiceData(new DebianServiceData());
         $dockerCompose->setMariaDb("mySuperSecurePassword");
       
         $expectedString = <<<EOF
@@ -48,6 +51,7 @@ EOF;
     public function testGetStringWithMariaDb2(): void
     {
         $dockerCompose = new DockerCompose();
+        $dockerCompose->setServiceData(new DebianServiceData());
         $dockerCompose->setMariaDb("anotherSecure%$#password");
       
         $expectedString = <<<EOF

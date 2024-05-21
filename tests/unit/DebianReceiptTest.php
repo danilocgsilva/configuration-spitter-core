@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use Danilocgsilva\ConfigurationSpitter\Receipt\DebianReceipt;
+use Danilocgsilva\ConfigurationSpitter\ServicesData\DebianServiceData;
 use PHPUnit\Framework\TestCase;
 use Danilocgsilva\ConfigurationSpitter\DockerFile;
 use Danilocgsilva\ConfigurationSpitter\DockerCompose;
@@ -23,6 +24,7 @@ class DebianReceiptTest extends TestCase
     {
         $dockerFile = new DockerFile();
         $dockerCompose = new DockerCompose();
+        $dockerCompose->setServiceData(new DebianServiceData());
 
         $receiptData = $this->debianReceipt->get();
 
