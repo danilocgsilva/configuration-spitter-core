@@ -6,13 +6,25 @@ namespace Danilocgsilva\ConfigurationSpitter\ServicesData;
 
 class MariadbServiceData implements ServiceDataInterface
 {
-    public function getData(): array
+    private array $data;
+
+    public function __construct()
     {
-        return [
+        $this->data = [
             'image' => 'mariadb:latest',
             'environment' => [
                 'MARIADB_ROOT_PASSWORD' => ''
             ]
         ];
+    }
+
+    public function setPortRedirection(int $port)
+    {
+        $this->data['ports'] = [ $port . ':3306' ];
+    }
+    
+    public function getData(): array
+    {
+        return $this->data;
     }
 }

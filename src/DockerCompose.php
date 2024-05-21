@@ -13,26 +13,45 @@ class DockerCompose implements SpitterInterface
 {
     private array $dataArray = [];
 
+    private ServiceDataInterface $serviceData;
+
+    private string $serviceName;
+
     public function setServiceData(ServiceDataInterface $serviceData, string $serviceName)
     {
-        $this->dataArray = [
-            'services' => [
-                $serviceName => $serviceData->getData()
-            ]
-        ];
+        $this->serviceData = $serviceData;
+        $this->serviceName = $serviceName;
     }
 
     public function getString(): string
     {
+        if (!count($this->dataArray)) {
+            $this->buildDataArray();
+        }
         return Yaml::dump($this->dataArray, 5, 2);
     }
 
     public function setMariaDb(string $rootPassword): self
     {
+        $this->buildDataArray();
         $this->dataArray['services']['env']['links'] = ['mariadb'];
         $this->dataArray['services']['mariadb'] = (new MariadbServiceData())->getData();
         $this->dataArray['services']['mariadb']['environment']['MARIADB_ROOT_PASSWORD'] = $rootPassword;
 
         return $this;
+    }
+
+    public function getServiceData(): ServiceDataInterface
+    {
+        return $this->serviceData;
+    }
+
+    private function buildDataArray(): void
+    {
+        $this->dataArray = [
+            'services' => [
+                $this->serviceName => $this->serviceData->getData()
+            ]
+        ];
     }
 }

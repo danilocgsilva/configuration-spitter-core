@@ -6,9 +6,18 @@ namespace Danilocgsilva\ConfigurationSpitter\Receipt;
 
 use Danilocgsilva\ConfigurationSpitter\DockerCompose;
 use Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData;
+use Exception;
 
 class MariadbReceipt implements ReceiptInterface
 {
+    private DockerCompose $dockerCompose;
+
+    public function __construct()
+    {
+        $this->dockerCompose = new DockerCompose();
+        $this->dockerCompose->setServiceData(new MariadbServiceData(), 'mariadb');
+    }
+
     const PARAMETERS = [
         "port-redirect"
     ];
@@ -20,16 +29,32 @@ class MariadbReceipt implements ReceiptInterface
 
     public function get(): array
     {
-        $dockerCompose = new DockerCompose();
-        $dockerCompose->setServiceData(new MariadbServiceData(), 'mariadb');
-        
         return [
-            "docker-compose.yml" => $dockerCompose->getString()
+            "docker-compose.yml" => $this->dockerCompose->getString()
         ];
     }
 
     public function getParameters(): array
     {
         return self::PARAMETERS;
+    }
+
+    public function setProperty(string $propertyWithParameter): self
+    {
+        $propertyWithParameterArray = explode(":", $propertyWithParameter);
+        $property = $propertyWithParameterArray[0];
+        if (!in_array($property, self::PARAMETERS)) {
+            throw new Exception("The given property is not expected to be received.");
+        }
+        if (count($propertyWithParameterArray) === 2) {
+            $parameter = $propertyWithParameterArray[0];
+            $portRedirection = (int) $propertyWithParameterArray[1];
+            if ($parameter === "port-redirect") {
+                /** @var \Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData */
+                $mariadbServiceData = $this->dockerCompose->getServiceData();
+                $mariadbServiceData->setPortRedirection($portRedirection);
+            }
+        }
+        return $this;
     }
 }
