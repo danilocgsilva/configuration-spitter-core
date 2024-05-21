@@ -12,6 +12,8 @@ class MariadbReceipt implements ReceiptInterface
 {
     private DockerCompose $dockerCompose;
 
+    private string $explanationString = "Raise a mariadb service.";
+
     public function __construct()
     {
         $this->dockerCompose = new DockerCompose();
@@ -24,7 +26,7 @@ class MariadbReceipt implements ReceiptInterface
 
     public function explain(): string
     {
-        return "Raise a mariadb service.";
+        return $this->explanationString;
     }
 
     public function get(): array
@@ -53,6 +55,7 @@ class MariadbReceipt implements ReceiptInterface
                 /** @var \Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData */
                 $mariadbServiceData = $this->dockerCompose->getServiceData();
                 $mariadbServiceData->setPortRedirection($portRedirection);
+                $this->explanationString .= "\nSetted the redirection from $portRedirection to 3306.";
             }
         }
         return $this;

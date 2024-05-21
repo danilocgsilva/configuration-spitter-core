@@ -57,4 +57,12 @@ EOF;
 
         $this->assertSame($expectedFileData, $filesData['docker-compose.yml']);
     }
+
+    public function testExplainWithPortRedirectio(): void
+    {
+        $this->mariadbReceipt->setProperty("port-redirect:4006");
+        $expectedExplanation = "Raise a mariadb service.";
+        $expectedExplanation .= "\nSetted the redirection from 4006 to 3306.";
+        $this->assertSame($expectedExplanation, $this->mariadbReceipt->explain());
+    }
 }
