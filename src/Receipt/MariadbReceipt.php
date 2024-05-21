@@ -21,9 +21,10 @@ class MariadbReceipt implements ReceiptInterface
     public function get(): array
     {
         $dockerCompose = new DockerCompose();
+        $dockerCompose->setServiceData(new MariadbServiceData(), 'mariadb');
         
         return [
-            "docker-compose.yml" => 'a'
+            "docker-compose.yml" => $dockerCompose->getString()
         ];
     }
 
