@@ -7,6 +7,7 @@ namespace Tests\Unit;
 use Danilocgsilva\ConfigurationSpitter\DockerCompose;
 use Danilocgsilva\ConfigurationSpitter\ServicesData\DebianServiceData;
 use Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData;
+use Exception;
 use PHPUnit\Framework\TestCase;
 
 class DockerComposeTest extends TestCase
@@ -91,8 +92,15 @@ EOF;
         $this->assertSame($expectedString, $this->dockerCompose->getString());
     }
 
-    public function testSetPortRedirection(): void
+    public function testExceptionBeforeServiceDataAssigment(): void
     {
+        $this->expectException(Exception::class);
+        $this->dockerCompose->setPortRedirection(80, 80);
+    }
+
+    public function testSetPortRedirectionHttp(): void
+    {
+        $this->dockerCompose->setServiceData(new DebianServiceData(), 'env');
         $this->dockerCompose->setPortRedirection(80, 80);
         $expectedString = <<<EOF
 services:
@@ -100,7 +108,23 @@ services:
     build:
       context: .
     ports:
-      - "80:80"
+      - '80:80'
+
+EOF;
+        $this->assertSame($expectedString, $this->dockerCompose->getString());
+    }
+
+    public function testSetPortRedirectionMysql(): void
+    {
+        $this->dockerCompose->setServiceData(new DebianServiceData(), 'env');
+        $this->dockerCompose->setPortRedirection(3306, 3306);
+        $expectedString = <<<EOF
+services:
+  env:
+    build:
+      context: .
+    ports:
+      - '3306:3306'
 
 EOF;
         $this->assertSame($expectedString, $this->dockerCompose->getString());

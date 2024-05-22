@@ -8,6 +8,7 @@ use Danilocgsilva\ConfigurationSpitter\ServicesData\DebianServiceData;
 use Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData;
 use Danilocgsilva\ConfigurationSpitter\ServicesData\ServiceDataInterface;
 use Symfony\Component\Yaml\Yaml;
+use Exception;
 
 class DockerCompose implements SpitterInterface
 {
@@ -48,6 +49,9 @@ class DockerCompose implements SpitterInterface
 
     public function setPortRedirection(int $hostPort, int $containerPort): self
     {
+        $this->exceptIfMissingDataService();
+        $this->buildDataArray();
+        $this->dataArray['services']['env']['ports'] = [ sprintf("%s:%s", $hostPort, $containerPort) ];
         return $this;
     }
 
@@ -58,5 +62,12 @@ class DockerCompose implements SpitterInterface
                 $this->serviceName => $this->serviceData->getData()
             ]
         ];
+    }
+
+    private function exceptIfMissingDataService(): void
+    {
+        if (!isset($this->serviceData)) {
+            throw new Exception("You need first give a service class. Use self::setServiceData before any class operation.");
+        }
     }
 }

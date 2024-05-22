@@ -55,11 +55,11 @@ class DebianReceipt implements ReceiptInterface
         if ($property === "mariadb-server-and-client") {
             $this->dockerFile->setMariaDbServer();
             $this->dockerFile->setMariaDbClient();
-            $this->extraExplanationString = "\nThe container will have mariadb server and client as well.";
+            $this->extraExplanationString .= "\nThe container will have mariadb server and client as well.";
         }
         if ($property === "port-redirection") {
             $this->dockerCompose->setPortRedirection(80, 80);
-            $this->extraExplanationString = "\nIt will have redirection from port 80 from host to 80 of container.";
+            $this->extraExplanationString .= "\nIt will have redirection from port 80 from host to 80 of container.";
         }
         return $this;
     }
@@ -76,7 +76,7 @@ class DebianReceipt implements ReceiptInterface
     {
         $explanationString = $this->dockerFile->explain();
         if ($this->extraExplanationString !== "") {
-            $explanationString .= "\n" . $this->extraExplanationString;
+            $explanationString .= $this->extraExplanationString;
         }
         return $explanationString;
     }
