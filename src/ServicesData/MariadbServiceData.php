@@ -27,4 +27,11 @@ class MariadbServiceData implements ServiceDataInterface
     {
         return $this->data;
     }
+
+    public function setRootPassword(string $password)
+    {
+        $this->data['environment'] = [
+            'MARIADB_ROOT_PASSWORD' => $password
+        ];
+    }
 }

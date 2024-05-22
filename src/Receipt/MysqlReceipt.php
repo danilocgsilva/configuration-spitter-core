@@ -15,13 +15,14 @@ class MysqlReceipt implements ReceiptInterface
     private DockerCompose $dockerCompose;
 
     const PARAMETERS = [
-        "port-redirect"
+        "port-redirect",
+        "password"
     ];
     
     public function __construct()
     {
         $this->dockerCompose = new DockerCompose();
-        $this->dockerCompose->setServiceData(new MysqlServiceData(), 'mariadb');
+        $this->dockerCompose->setServiceData(new MysqlServiceData(), 'mysql');
     }
 
     public function explain(): string
@@ -57,10 +58,16 @@ class MysqlReceipt implements ReceiptInterface
             $parameter = $propertyWithParameterArray[0];
             $portRedirection = (int) $propertyWithParameterArray[1];
             if ($parameter === "port-redirect") {
-                /** @var \Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData */
-                $mariadbServiceData = $this->dockerCompose->getServiceData();
-                $mariadbServiceData->setPortRedirection($portRedirection);
+                /** @var \Danilocgsilva\ConfigurationSpitter\ServicesData\MysqlServiceData */
+                $mysqlServiceData = $this->dockerCompose->getServiceData();
+                $mysqlServiceData->setPortRedirection($portRedirection);
                 $this->explanationString .= "\nSetted the redirection from $portRedirection to 3306.";
+            }
+            if ($parameter === "password") {
+                $rootPassword = $propertyWithParameterArray[1];
+                /** @var \Danilocgsilva\ConfigurationSpitter\ServicesData\MysqlServiceData */
+                $mysqlServiceData = $this->dockerCompose->getServiceData();
+                $mysqlServiceData->setRootPassword($rootPassword);
             }
         }
         return $this;

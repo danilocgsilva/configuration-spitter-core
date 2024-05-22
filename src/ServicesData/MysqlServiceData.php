@@ -27,4 +27,11 @@ class MysqlServiceData implements ServiceDataInterface
     {
         return $this->data;
     }
+
+    public function setRootPassword(string $password)
+    {
+        $this->data['environment'] = [
+            'MYSQL_ROOT_PASSWORD' => $password
+        ];
+    }
 }

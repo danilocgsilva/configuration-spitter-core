@@ -21,7 +21,7 @@ class MysqlReceiptTest extends TestCase
     {
         $expectedFileData = <<<EOF
 services:
-  mariadb:
+  mysql:
     image: 'mysql:latest'
     environment:
       MYSQL_ROOT_PASSWORD: ''
@@ -44,7 +44,7 @@ EOF;
     {
         $expectedFileData = <<<EOF
 services:
-  mariadb:
+  mysql:
     image: 'mysql:latest'
     environment:
       MYSQL_ROOT_PASSWORD: ''
@@ -64,5 +64,40 @@ EOF;
         $expectedExplanation = "Raise a mysql service.";
         $expectedExplanation .= "\nSetted the redirection from 3318 to 3306.";
         $this->assertSame($expectedExplanation, $this->mysqlReceipt->explain());
+    }
+
+    public function testSetRootPassword(): void
+    {
+        $this->mysqlReceipt->setProperty("password:ffdasd66632");
+        $expectedFileData = <<<EOF
+services:
+  mysql:
+    image: 'mysql:latest'
+    environment:
+      MYSQL_ROOT_PASSWORD: ffdasd66632
+
+EOF;
+        $filesData = $this->mysqlReceipt->get();
+        $this->assertSame($expectedFileData, $filesData['docker-compose.yml']);
+    }
+
+    public function testSettingPortRedirectionAndPassword(): void
+    {
+        $expectedFileData = <<<EOF
+services:
+  mysql:
+    image: 'mysql:latest'
+    environment:
+      MYSQL_ROOT_PASSWORD: kjh45324
+    ports:
+      - '3420:3306'
+
+EOF;
+
+        $this->mysqlReceipt->setProperty("password:kjh45324");
+        $this->mysqlReceipt->setProperty("port-redirect:3420");
+
+        $filesData = $this->mysqlReceipt->get();
+        $this->assertSame($expectedFileData, $filesData['docker-compose.yml']);
     }
 }

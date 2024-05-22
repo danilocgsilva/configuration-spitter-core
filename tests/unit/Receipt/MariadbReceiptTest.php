@@ -65,4 +65,39 @@ EOF;
         $expectedExplanation .= "\nSetted the redirection from 4006 to 3306.";
         $this->assertSame($expectedExplanation, $this->mariadbReceipt->explain());
     }
+
+    public function testSetRootPassword(): void
+    {
+        $this->mariadbReceipt->setProperty("password:1234abcd");
+        $expectedFileData = <<<EOF
+services:
+  mariadb:
+    image: 'mariadb:latest'
+    environment:
+      MARIADB_ROOT_PASSWORD: 1234abcd
+
+EOF;
+        $filesData = $this->mariadbReceipt->get();
+        $this->assertSame($expectedFileData, $filesData['docker-compose.yml']);
+    }
+
+    public function testSettingPortRedirectionAndPassword(): void
+    {
+        $expectedFileData = <<<EOF
+services:
+  mariadb:
+    image: 'mariadb:latest'
+    environment:
+      MARIADB_ROOT_PASSWORD: abcd4321
+    ports:
+      - '3320:3306'
+
+EOF;
+
+        $this->mariadbReceipt->setProperty("password:abcd4321");
+        $this->mariadbReceipt->setProperty("port-redirect:3320");
+
+        $filesData = $this->mariadbReceipt->get();
+        $this->assertSame($expectedFileData, $filesData['docker-compose.yml']);
+    }
 }

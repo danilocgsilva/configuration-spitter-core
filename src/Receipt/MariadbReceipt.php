@@ -20,7 +20,8 @@ class MariadbReceipt implements ReceiptInterface
     }
 
     const PARAMETERS = [
-        "port-redirect"
+        "port-redirect",
+        "password"
     ];
 
     public function __construct()
@@ -55,12 +56,18 @@ class MariadbReceipt implements ReceiptInterface
         }
         if (count($propertyWithParameterArray) === 2) {
             $parameter = $propertyWithParameterArray[0];
-            $portRedirection = (int) $propertyWithParameterArray[1];
             if ($parameter === "port-redirect") {
+                $portRedirection = (int) $propertyWithParameterArray[1];
                 /** @var \Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData */
                 $mariadbServiceData = $this->dockerCompose->getServiceData();
                 $mariadbServiceData->setPortRedirection($portRedirection);
                 $this->explanationString .= "\nSetted the redirection from $portRedirection to 3306.";
+            }
+            if ($parameter === "password") {
+                $rootPassword = $propertyWithParameterArray[1];
+                /** @var \Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData */
+                $mariadbServiceData = $this->dockerCompose->getServiceData();
+                $mariadbServiceData->setRootPassword($rootPassword);
             }
         }
         return $this;
