@@ -121,4 +121,17 @@ EOF;
 
         $this->assertSame($expectedExplanation, $this->debianReceipt->explain());
     }
+
+    public function testChangeServiceName(): void
+    {
+        $this->debianReceipt->setProperty("service-name:mydifferentservicename");
+        $expectedString = <<<EOF
+services:
+  mydifferentservicename:
+    build:
+      context: .
+
+EOF;
+        $this->assertSame($expectedString, $this->debianReceipt->getDockerComposeObject()->getString());
+    }
 }

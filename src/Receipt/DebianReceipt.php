@@ -22,7 +22,8 @@ class DebianReceipt implements ReceiptInterface
         "upgrade",
         "add-maria-db-client-with-password",
         "mariadb-server-and-client",
-        "port-redirection"
+        "port-redirection",
+        "service-name"
     ];
 
     public function __construct()
@@ -60,6 +61,9 @@ class DebianReceipt implements ReceiptInterface
         if ($property === "port-redirection") {
             $this->dockerCompose->setPortRedirection(80, 80);
             $this->extraExplanationString .= "\nIt will have redirection from port 80 from host to 80 of container.";
+        }
+        if ($property === "service-name") {
+            $this->dockerCompose->changeServiceName($propertyWithParameterArray[1]);
         }
         return $this;
     }
