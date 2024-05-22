@@ -96,4 +96,23 @@ EOF;
 
         $this->assertSame($expectedString, $this->dockerFile->getString());
     }
+
+    public function testMariadbServer(): void
+    {
+        $expectedString = <<<EOF
+FROM debian:bookworm-slim
+
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install mariadb-server -y
+
+CMD while : ; do sleep 1000; done
+EOF;
+        $this->dockerFile
+            ->setUpdate()
+            ->setUpgrade()
+            ->setMariadbServer();
+
+        $this->assertSame($expectedString, $this->dockerFile->getString());
+    }
 }

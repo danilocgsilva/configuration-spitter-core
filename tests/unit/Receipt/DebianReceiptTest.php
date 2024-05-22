@@ -111,4 +111,10 @@ EOF;
         $this->expectException(Exception::class);
         $this->debianReceipt->setProperty("ThisPropertyDoesNotExists");
     }
+
+    public function testAddMariaDbSameContainer(): void
+    {
+        $this->debianReceipt->setProperty("mariadb-server-and-client");
+        $dockerCompose = $this->debianReceipt->getDockerComposeObject();
+    }
 }

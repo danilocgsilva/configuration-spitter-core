@@ -18,7 +18,8 @@ class DebianReceipt implements ReceiptInterface
     const PARAMETERS = [
         "update",
         "upgrade",
-        "add-maria-db-client-with-password"
+        "add-maria-db-client-with-password",
+        "mariadb-server-and-client"
     ];
 
     public function __construct()
@@ -47,6 +48,10 @@ class DebianReceipt implements ReceiptInterface
             if ($parameter === "add-maria-db-client-with-password") {
                 $this->dockerCompose->setMariaDb($password);
             }
+        }
+        if ($property === "mariadb-server-and-client") {
+            $this->dockerFile->setMariaDbServer();
+            $this->dockerFile->setMariaDbClient();
         }
         return $this;
     }

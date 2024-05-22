@@ -11,6 +11,8 @@ class DockerFile implements SpitterInterface
     private bool $upgrade = false;
 
     private bool $mariadbClient = false;
+
+    private bool $mariadbServer = false;
     
     public function getString(): string
     {
@@ -26,6 +28,10 @@ class DockerFile implements SpitterInterface
 
         if ($this->mariadbClient) {
             $string .= "RUN apt-get install mariadb-client -y\n";
+        }
+
+        if ($this->mariadbServer) {
+            $string .= "RUN apt-get install mariadb-server -y\n";
         }
 
         $string .= "\nCMD while : ; do sleep 1000; done";
@@ -48,6 +54,12 @@ class DockerFile implements SpitterInterface
     public function setMariadbClient(): self
     {
         $this->mariadbClient = true;
+        return $this;
+    }
+
+    public function setMariaDbServer(): self
+    {
+        $this->mariadbServer = true;
         return $this;
     }
 
