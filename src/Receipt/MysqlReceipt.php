@@ -5,33 +5,33 @@ declare(strict_types=1);
 namespace Danilocgsilva\ConfigurationSpitter\Receipt;
 
 use Danilocgsilva\ConfigurationSpitter\DockerCompose;
-use Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData;
+use Danilocgsilva\ConfigurationSpitter\ServicesData\MysqlServiceData;
 use Exception;
 
-class MariadbReceipt implements ReceiptInterface
+class MysqlReceipt implements ReceiptInterface
 {
+    private string $explanationString = "Raise a mysql service.";
+
     private DockerCompose $dockerCompose;
-
-    private string $explanationString = "Raise a mariadb service.";
-
-    public static function getName(): string
-    {
-        return "MariaDB";
-    }
 
     const PARAMETERS = [
         "port-redirect"
     ];
-
+    
     public function __construct()
     {
         $this->dockerCompose = new DockerCompose();
-        $this->dockerCompose->setServiceData(new MariadbServiceData(), 'mariadb');
+        $this->dockerCompose->setServiceData(new MysqlServiceData(), 'mariadb');
     }
 
     public function explain(): string
     {
         return $this->explanationString;
+    }
+
+    public function getParameters(): array
+    {
+        return [];
     }
 
     public function get(): array
@@ -41,9 +41,9 @@ class MariadbReceipt implements ReceiptInterface
         ];
     }
 
-    public function getParameters(): array
+    public static function getName(): string
     {
-        return self::PARAMETERS;
+        return "Mysql";
     }
 
     public function setProperty(string $propertyWithParameter): self

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Danilocgsilva\ConfigurationSpitter;
 
-use Danilocgsilva\ConfigurationSpitter\ServicesData\DebianServiceData;
 use Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData;
 use Danilocgsilva\ConfigurationSpitter\ServicesData\ServiceDataInterface;
 use Symfony\Component\Yaml\Yaml;
