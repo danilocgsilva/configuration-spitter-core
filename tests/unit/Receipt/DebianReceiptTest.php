@@ -41,12 +41,6 @@ class DebianReceiptTest extends TestCase
         );
     }
 
-    public function testExplain(): void
-    {
-        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.";
-        $this->assertSame($expectedExplanation, $this->debianReceipt->explain());
-    }
-
     public function testExplainWithUpdate(): void
     {
         $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
@@ -85,6 +79,12 @@ EOF;
         $this->assertSame($expectedString, $dockerFile->getString());
     }
 
+    public function testExplain(): void
+    {
+        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.";
+        $this->assertSame($expectedExplanation, $this->debianReceipt->explain());
+    }
+
     public function testSetMariaDb(): void
     {
         $this->debianReceipt->setProperty("add-maria-db-client-with-password:themariadbpassword");
@@ -112,9 +112,13 @@ EOF;
         $this->debianReceipt->setProperty("ThisPropertyDoesNotExists");
     }
 
-    public function testAddMariaDbSameContainer(): void
+    public function testEexplanationWithMariadbClientAndServer(): void
     {
         $this->debianReceipt->setProperty("mariadb-server-and-client");
-        $dockerCompose = $this->debianReceipt->getDockerComposeObject();
+
+        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.";
+        $expectedExplanation .= "\nThe container will have mariadb server and client as well.";
+
+        $this->assertSame($expectedExplanation, $this->debianReceipt->explain());
     }
 }

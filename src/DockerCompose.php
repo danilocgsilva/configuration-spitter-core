@@ -46,6 +46,11 @@ class DockerCompose implements SpitterInterface
         return $this->serviceData;
     }
 
+    public function setPortRedirection(int $hostPort, int $containerPort): self
+    {
+        return $this;
+    }
+
     private function buildDataArray(): void
     {
         $this->dataArray = [

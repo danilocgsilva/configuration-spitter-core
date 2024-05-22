@@ -11,6 +11,13 @@ use PHPUnit\Framework\TestCase;
 
 class DockerComposeTest extends TestCase
 {
+    private DockerCompose $dockerCompose;
+
+    public function setUp(): void
+    {
+        $this->dockerCompose = new DockerCompose();
+    }
+    
     public function testGetString(): void
     {
         $expectedString = <<<EOF
@@ -20,17 +27,15 @@ services:
       context: .
 
 EOF;
-        $dockerCompose = new DockerCompose();
-        $dockerCompose->setServiceData(new DebianServiceData(), 'env');
+        $this->dockerCompose->setServiceData(new DebianServiceData(), 'env');
 
-        $this->assertSame($expectedString, $dockerCompose->getString());
+        $this->assertSame($expectedString, $this->dockerCompose->getString());
     }
 
     public function testGetStringWithMariaDb(): void
     {
-        $dockerCompose = new DockerCompose();
-        $dockerCompose->setServiceData(new DebianServiceData(), 'env');
-        $dockerCompose->setMariaDb("mySuperSecurePassword");
+        $this->dockerCompose->setServiceData(new DebianServiceData(), 'env');
+        $this->dockerCompose->setMariaDb("mySuperSecurePassword");
       
         $expectedString = <<<EOF
 services:
@@ -46,14 +51,13 @@ services:
 
 EOF;
 
-        $this->assertSame($expectedString, $dockerCompose->getString());
+        $this->assertSame($expectedString, $this->dockerCompose->getString());
     }
 
     public function testGetStringWithMariaDb2(): void
     {
-        $dockerCompose = new DockerCompose();
-        $dockerCompose->setServiceData(new DebianServiceData(), 'env');
-        $dockerCompose->setMariaDb("anotherSecure%$#password");
+        $this->dockerCompose->setServiceData(new DebianServiceData(), 'env');
+        $this->dockerCompose->setMariaDb("anotherSecure%$#password");
       
         $expectedString = <<<EOF
 services:
@@ -69,13 +73,12 @@ services:
 
 EOF;
 
-        $this->assertSame($expectedString, $dockerCompose->getString());
+        $this->assertSame($expectedString, $this->dockerCompose->getString());
     }
 
     public function testGetStringForDatabase(): void
     {
-        $dockerCompose = new DockerCompose();
-        $dockerCompose->setServiceData(new MariadbServiceData(), 'mariadb');
+        $this->dockerCompose->setServiceData(new MariadbServiceData(), 'mariadb');
         $expectedString = <<<EOF
 services:
   mariadb:
@@ -85,6 +88,21 @@ services:
 
 EOF;
 
-        $this->assertSame($expectedString, $dockerCompose->getString());
+        $this->assertSame($expectedString, $this->dockerCompose->getString());
+    }
+
+    public function testSetPortRedirection(): void
+    {
+        $this->dockerCompose->setPortRedirection(80, 80);
+        $expectedString = <<<EOF
+services:
+  env:
+    build:
+      context: .
+    ports:
+      - "80:80"
+
+EOF;
+        $this->assertSame($expectedString, $this->dockerCompose->getString());
     }
 }
