@@ -35,7 +35,7 @@ class DockerCompose implements SpitterInterface
     public function setMariaDb(string $rootPassword): self
     {
         $this->buildDataArray();
-        $this->dataArray['services']['env']['links'] = ['mariadb'];
+        $this->dataArray['services'][$this->serviceName]['links'] = ['mariadb'];
         $this->dataArray['services']['mariadb'] = (new MariadbServiceData())->getData();
         $this->dataArray['services']['mariadb']['environment']['MARIADB_ROOT_PASSWORD'] = $rootPassword;
 
@@ -51,7 +51,7 @@ class DockerCompose implements SpitterInterface
     {
         $this->exceptIfMissingDataService();
         $this->buildDataArray();
-        $this->dataArray['services']['env']['ports'] = [ sprintf("%s:%s", $hostPort, $containerPort) ];
+        $this->dataArray['services'][$this->serviceName]['ports'] = [ sprintf("%s:%s", $hostPort, $containerPort) ];
         return $this;
     }
 

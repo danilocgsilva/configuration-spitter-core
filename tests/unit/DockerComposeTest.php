@@ -114,6 +114,22 @@ EOF;
         $this->assertSame($expectedString, $this->dockerCompose->getString());
     }
 
+    public function testSetPortRedirectionDifferentServiceName(): void
+    {
+        $this->dockerCompose->setServiceData(new DebianServiceData(), 'mymainservice');
+        $this->dockerCompose->setPortRedirection(80, 80);
+        $expectedString = <<<EOF
+services:
+  mymainservice:
+    build:
+      context: .
+    ports:
+      - '80:80'
+
+EOF;
+        $this->assertSame($expectedString, $this->dockerCompose->getString());
+    }
+
     public function testSetPortRedirectionMysql(): void
     {
         $this->dockerCompose->setServiceData(new DebianServiceData(), 'env');
@@ -127,6 +143,55 @@ services:
       - '3306:3306'
 
 EOF;
+        $this->assertSame($expectedString, $this->dockerCompose->getString());
+    }
+
+    public function testEnvironmentDifferentNameService(): void
+    {
+        $this->dockerCompose->setServiceData(new DebianServiceData(), 'debiancontainer');
+        $expectedString = <<<EOF
+services:
+  debiancontainer:
+    build:
+      context: .
+
+EOF;
+        $this->assertSame($expectedString, $this->dockerCompose->getString());
+    }
+
+    public function testEnvironmentDifferentNameServiceForMariadb(): void
+    {
+        $this->dockerCompose->setServiceData(new MariadbServiceData(), 'mariadbcontainer');
+        $expectedString = <<<EOF
+services:
+  mariadbcontainer:
+    image: 'mariadb:latest'
+    environment:
+      MARIADB_ROOT_PASSWORD: ''
+
+EOF;
+        $this->assertSame($expectedString, $this->dockerCompose->getString());
+    }
+
+    public function testGetStringMariaDbChangedMainEnv(): void
+    {
+        $this->dockerCompose->setServiceData(new DebianServiceData(), 'debiancontainer');
+        $this->dockerCompose->setMariaDb("mySuperSecurePassword");
+      
+        $expectedString = <<<EOF
+services:
+  debiancontainer:
+    build:
+      context: .
+    links:
+      - mariadb
+  mariadb:
+    image: 'mariadb:latest'
+    environment:
+      MARIADB_ROOT_PASSWORD: mySuperSecurePassword
+
+EOF;
+
         $this->assertSame($expectedString, $this->dockerCompose->getString());
     }
 }
