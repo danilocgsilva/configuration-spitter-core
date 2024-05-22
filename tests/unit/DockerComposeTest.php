@@ -194,4 +194,19 @@ EOF;
 
         $this->assertSame($expectedString, $this->dockerCompose->getString());
     }
+
+    public function testChangeServiceName(): void
+    {
+        $this->dockerCompose->setServiceData(new DebianServiceData(), 'env1');
+        $this->dockerCompose->changeServiceName('env2');
+
+        $expectedString = <<<EOF
+services:
+  env2:
+    build:
+      context: .
+
+EOF;
+        $this->assertSame($expectedString, $this->dockerCompose->getString());
+    }
 }

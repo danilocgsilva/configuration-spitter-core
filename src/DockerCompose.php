@@ -24,6 +24,12 @@ class DockerCompose implements SpitterInterface
         $this->serviceName = $serviceName;
     }
 
+    public function changeServiceName(string $serviceName): self
+    {
+        $this->serviceName = $serviceName;
+        return $this;
+    }
+
     public function getString(): string
     {
         if (!count($this->dataArray)) {
