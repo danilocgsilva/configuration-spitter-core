@@ -14,6 +14,11 @@ class MariadbReceipt implements ReceiptInterface
 
     private string $explanationString = "Raise a mariadb service.";
 
+    public static function getName(): string
+    {
+        return "MariaDB";
+    }
+
     public function __construct()
     {
         $this->dockerCompose = new DockerCompose();

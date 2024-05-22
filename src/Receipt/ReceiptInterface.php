@@ -11,4 +11,6 @@ interface ReceiptInterface
     public function getParameters(): array;
 
     public function get(): array;
+
+    public static function getName(): string;
 }

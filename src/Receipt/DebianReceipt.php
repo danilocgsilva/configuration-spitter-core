@@ -26,6 +26,11 @@ class DebianReceipt implements ReceiptInterface
         "service-name"
     ];
 
+    public static function getName(): string
+    {
+        return "Debian";
+    }
+
     public function __construct()
     {
         $this->dockerCompose = new DockerCompose();
