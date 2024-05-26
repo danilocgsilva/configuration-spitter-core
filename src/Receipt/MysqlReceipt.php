@@ -32,7 +32,7 @@ class MysqlReceipt implements ReceiptInterface
 
     public function getParameters(): array
     {
-        return [];
+        return self::PARAMETERS;
     }
 
     public function get(): array

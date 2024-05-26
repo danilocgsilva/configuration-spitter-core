@@ -100,4 +100,14 @@ EOF;
         $filesData = $this->mariadbReceipt->get();
         $this->assertSame($expectedFileData, $filesData['docker-compose.yml']);
     }
+
+    public function testGetParameters()
+    {
+        $expectedParameters = [
+            "port-redirect",
+            "password"
+        ];
+
+        $this->assertSame($expectedParameters, $this->mariadbReceipt->getParameters());
+    }
 }
