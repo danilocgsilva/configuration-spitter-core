@@ -110,4 +110,10 @@ EOF;
 
         $this->assertSame($expectedParameters, $this->mysqlReceipt->getParameters());
     }
+
+    public function testGetName(): void
+    {
+        $expectedValue = "Mysql";
+        $this->assertSame($expectedValue, $this->mysqlReceipt->getName());
+    }
 }
