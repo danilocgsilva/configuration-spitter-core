@@ -134,4 +134,18 @@ services:
 EOF;
         $this->assertSame($expectedString, $this->debianReceipt->getDockerComposeObject()->getString());
     }
+
+    public function testSetContainerName(): void
+    {
+        $this->debianReceipt->setProperty("container-name:my_debian_container");
+        $expectedString = <<<EOF
+services:
+  env:
+    build:
+      context: .
+    container_name: my_debian_container
+
+EOF;
+        $this->assertSame($expectedString, $this->debianReceipt->getDockerComposeObject()->getString());
+    }
 }

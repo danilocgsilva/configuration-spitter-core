@@ -8,14 +8,9 @@ use Danilocgsilva\ConfigurationSpitter\DockerCompose;
 use Danilocgsilva\ConfigurationSpitter\ServicesData\NodeServiceData;
 use Exception;
 
-class NodeReceipt implements ReceiptInterface
+class NodeReceipt extends AbstractReceipt implements ReceiptInterface
 {
     private string $explanationString = "Creates a basic node receipt.";
-
-    private DockerCompose $dockerCompose;
-
-    const PARAMETERS = [
-    ];
 
     public static function getName(): string
     {
@@ -26,6 +21,9 @@ class NodeReceipt implements ReceiptInterface
     {
         $this->dockerCompose = new DockerCompose();
         $this->dockerCompose->setServiceData(new NodeServiceData(), 'node');
+        $this->parameters = [
+            "container-name"
+        ];
     }
     
     public function get(): array
@@ -45,18 +43,9 @@ class NodeReceipt implements ReceiptInterface
         return $this->dockerCompose;
     }
 
-    public function getParameters(): array
-    {
-        return self::PARAMETERS;
-    }
-
     public function setProperty(string $propertyWithParameter): self
     {
-        $propertyWithParameterArray = explode(":", $propertyWithParameter);
-        $property = $propertyWithParameterArray[0];
-        if (!in_array($property, self::PARAMETERS)) {
-            throw new Exception("The given property is not expected to be received.");
-        }
+        $validations = $this->validateParameters($propertyWithParameter);
         return $this;
     }
 }

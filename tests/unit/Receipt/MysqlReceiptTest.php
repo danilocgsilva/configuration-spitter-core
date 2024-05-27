@@ -105,7 +105,8 @@ EOF;
     {
         $expectedParameters = [
             "port-redirect",
-            "password"
+            "password",
+            "container-name"
         ];
 
         $this->assertSame($expectedParameters, $this->mysqlReceipt->getParameters());

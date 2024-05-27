@@ -105,9 +105,25 @@ EOF;
     {
         $expectedParameters = [
             "port-redirect",
-            "password"
+            "password",
+            "container-name"
         ];
 
         $this->assertSame($expectedParameters, $this->mariadbReceipt->getParameters());
+    }
+
+    public function testSetContainerName(): void
+    {
+        $this->mariadbReceipt->setProperty("container-name:my_mariadb_container");
+        $expectedString = <<<EOF
+services:
+  mariadb:
+    image: 'mariadb:latest'
+    environment:
+      MARIADB_ROOT_PASSWORD: ''
+    container_name: my_mariadb_container
+
+EOF;
+        $this->assertSame($expectedString, $this->mariadbReceipt->getDockerComposeObject()->getString());
     }
 }

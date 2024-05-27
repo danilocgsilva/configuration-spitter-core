@@ -60,6 +60,15 @@ class DockerCompose implements SpitterInterface
         return $this;
     }
 
+    public function setContainerName(string $containerName): self
+    {
+        if (!method_exists($this->serviceData, "setContainerName")) {
+            throw new Exception("The setContainerName shoud not be used with this receipt.");
+        }
+        $this->serviceData->setContainerName($containerName);
+        return $this;
+    }
+
     private function buildDataArray(): void
     {
         $this->dataArray = [

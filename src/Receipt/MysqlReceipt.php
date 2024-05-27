@@ -8,31 +8,24 @@ use Danilocgsilva\ConfigurationSpitter\DockerCompose;
 use Danilocgsilva\ConfigurationSpitter\ServicesData\MysqlServiceData;
 use Exception;
 
-class MysqlReceipt implements ReceiptInterface
+class MysqlReceipt extends AbstractReceipt implements ReceiptInterface
 {
     private string $explanationString = "Raise a mysql service.";
 
-    private DockerCompose $dockerCompose;
-
-    const PARAMETERS = [
-        "port-redirect",
-        "password"
-    ];
-    
     public function __construct()
     {
         $this->dockerCompose = new DockerCompose();
         $this->dockerCompose->setServiceData(new MysqlServiceData(), 'mysql');
+        $this->parameters = [
+            "port-redirect",
+            "password",
+            "container-name"
+        ];
     }
 
     public function explain(): string
     {
         return $this->explanationString;
-    }
-
-    public function getParameters(): array
-    {
-        return self::PARAMETERS;
     }
 
     public function get(): array
@@ -49,14 +42,10 @@ class MysqlReceipt implements ReceiptInterface
 
     public function setProperty(string $propertyWithParameter): self
     {
-        $propertyWithParameterArray = explode(":", $propertyWithParameter);
-        $property = $propertyWithParameterArray[0];
-        if (!in_array($property, self::PARAMETERS)) {
-            throw new Exception("The given property is not expected to be received.");
-        }
-        if (count($propertyWithParameterArray) === 2) {
-            $parameter = $propertyWithParameterArray[0];
-            $portRedirection = (int) $propertyWithParameterArray[1];
+        $validations = $this->validateParameters($propertyWithParameter);
+        if ($validations['countTerms'] === 2) {
+            $parameter = $validations['property'];
+            $portRedirection = (int) $validations['argument'];
             if ($parameter === "port-redirect") {
                 /** @var \Danilocgsilva\ConfigurationSpitter\ServicesData\MysqlServiceData */
                 $mysqlServiceData = $this->dockerCompose->getServiceData();
@@ -64,7 +53,7 @@ class MysqlReceipt implements ReceiptInterface
                 $this->explanationString .= "\nSetted the redirection from $portRedirection to 3306.";
             }
             if ($parameter === "password") {
-                $rootPassword = $propertyWithParameterArray[1];
+                $rootPassword = $validations['argument'];
                 /** @var \Danilocgsilva\ConfigurationSpitter\ServicesData\MysqlServiceData */
                 $mysqlServiceData = $this->dockerCompose->getServiceData();
                 $mysqlServiceData->setRootPassword($rootPassword);

@@ -34,4 +34,10 @@ class MariadbServiceData implements ServiceDataInterface
             'MARIADB_ROOT_PASSWORD' => $password
         ];
     }
+
+    public function setContainerName(string $containerName): self
+    {
+        $this->data['container_name'] = $containerName;
+        return $this;
+    }
 }
