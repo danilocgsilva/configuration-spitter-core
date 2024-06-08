@@ -66,6 +66,12 @@ EOF;
         $this->assertSame($expectedExplanation, $this->mariadbReceipt->explain());
     }
 
+    public function testExplainSimple(): void
+    {
+        $expectedString = "Raise a mariadb service.\nThere's no port redirection setted yet - will use the 3306.";
+        $this->assertSame($expectedString, $this->mariadbReceipt->explain());
+    }
+
     public function testSetRootPassword(): void
     {
         $this->mariadbReceipt->setProperty("password:1234abcd");

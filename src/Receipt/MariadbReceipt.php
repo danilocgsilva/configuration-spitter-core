@@ -10,8 +10,11 @@ use Exception;
 
 class MariadbReceipt extends AbstractReceipt implements ReceiptInterface
 {
-    private string $explanationString = "Raise a mariadb service.";
-
+    private array $explanationData = [
+        "Raise a mariadb service.",
+        "There's no port redirection setted yet - will use the 3306."
+    ];
+    
     public static function getName(): string
     {
         return "MariaDB";
@@ -30,7 +33,7 @@ class MariadbReceipt extends AbstractReceipt implements ReceiptInterface
 
     public function explain(): string
     {
-        return $this->explanationString;
+        return implode("\n", $this->explanationData);
     }
 
     public function get(): array
@@ -50,7 +53,8 @@ class MariadbReceipt extends AbstractReceipt implements ReceiptInterface
                 /** @var \Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData */
                 $mariadbServiceData = $this->dockerCompose->getServiceData();
                 $mariadbServiceData->setPortRedirection($portRedirection);
-                $this->explanationString .= "\nSetted the redirection from $portRedirection to 3306.";
+                unset($this->explanationData[1]);
+                $this->explanationData[] = "Setted the redirection from $portRedirection to 3306.";
             }
             if ($parameter === "password") {
                 $rootPassword = $validations['argument'];
@@ -59,7 +63,6 @@ class MariadbReceipt extends AbstractReceipt implements ReceiptInterface
                 $mariadbServiceData->setRootPassword($rootPassword);
             }
             if ($parameter === "container-name") {
-                // $rootPassword = $validations['argument'];
                 /** @var \Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData */
                 $mariadbServiceData = $this->dockerCompose->getServiceData();
                 $mariadbServiceData->setContainerName($validations['argument']);
