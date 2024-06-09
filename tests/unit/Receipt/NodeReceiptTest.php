@@ -38,6 +38,12 @@ EOF;
         $this->nodeReceipt->setProperty("ThisPropertyDoesNotExists");
     }
 
+    public function testGetParameters()
+    {
+        $parameters = $this->nodeReceipt->getParameters();
+        $expectedParameter = "container-name";
+        $this->assertSame($expectedParameter, $parameters[0]);
+    }
 
     public function testExplain(): void
     {
