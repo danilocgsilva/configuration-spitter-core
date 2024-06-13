@@ -64,6 +64,7 @@ class DebianReceipt extends AbstractReceipt implements ReceiptInterface
         if ($validations['property'] === "mariadb-server-and-client") {
             $this->dockerFile->setMariaDbServer();
             $this->dockerFile->setMariaDbClient();
+            $this->dockerFile->disableExplanation("mariadb");
             $this->extraExplanationString .= "\nThe container will have mariadb server and client as well.";
         }
         if ($validations['property'] === "port-redirection") {

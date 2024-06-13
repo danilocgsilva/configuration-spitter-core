@@ -92,6 +92,22 @@ EOF;
         $this->assertSame($expectedExplanation, $this->dockerFile->explain());
     }
 
+    public function testExplainMysql(): void
+    {
+        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
+        $expectedExplanation .= "The container will be shipped with mysql.";
+        $this->dockerFile->setMysql();
+        $this->assertSame($expectedExplanation, $this->dockerFile->explain());
+    }
+
+    public function testExplainMariadbclient(): void
+    {
+        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
+        $expectedExplanation .= "The Mariadb client will be added to the container.";
+        $this->dockerFile->setMariadbClient();
+        $this->assertSame($expectedExplanation, $this->dockerFile->explain());
+    }
+
     public function testMariadbClient(): void
     {
         $expectedString = <<<EOF

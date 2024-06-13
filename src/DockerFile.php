@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Danilocgsilva\ConfigurationSpitter;
 
+use Exception;
+
 class DockerFile implements SpitterInterface
 {
     private bool $update = false;
@@ -13,6 +15,8 @@ class DockerFile implements SpitterInterface
     private bool $mariadbClient = false;
 
     private bool $mysql = false;
+
+    private bool $mariadbExplanationOff = false;
 
     private bool $mariadbServer = false;
     
@@ -67,20 +71,35 @@ class DockerFile implements SpitterInterface
         return $this;
     }
 
+    public function setMysql()
+    {
+        $this->mysql = true;
+    }
+
+    public function disableExplanation(string $explanationService): void
+    {
+        if ($explanationService === "mariadb") {
+            $this->mariadbExplanationOff = true;
+        } else {
+            throw new Exception("Wrong explanation to disable.");
+        }
+    }
+
     public function explain(): string
     {   $baseExplainString = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.";
         if ($this->update) {
             $baseExplainString .= "\nIt also perform an update in the operational system repository, so packages can be installed through default operating system utility.";
         }
         if ($this->upgrade) {
-            $baseExplainString .= "\nWill update operating system packages.";   
+            $baseExplainString .= "\nWill update operating system packages.";
+        }
+        if ($this->mysql) {
+            $baseExplainString .= "\nThe container will be shipped with mysql.";
+        }
+        if ($this->mariadbClient && !$this->mariadbExplanationOff) {
+            $baseExplainString .= "\nThe Mariadb client will be added to the container.";
         }
         
         return $baseExplainString;
-    }
-
-    public function setMysql()
-    {
-        $this->mysql = true;
     }
 }
