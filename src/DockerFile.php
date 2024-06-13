@@ -12,31 +12,35 @@ class DockerFile implements SpitterInterface
 
     private bool $mariadbClient = false;
 
+    private bool $mysql = false;
+
     private bool $mariadbServer = false;
     
     public function getString(): string
     {
-        $string = "FROM debian:bookworm-slim\n";
-
+        $stringArray = ["FROM debian:bookworm-slim"];
+        $stringArray[] = "";
         if ($this->update) {
-            $string .= "\nRUN apt-get update\n";
+            $stringArray[] = "RUN apt-get update";
         }
-
         if ($this->upgrade) {
-            $string .= "RUN apt-get upgrade -y\n";
+            $stringArray[] = "RUN apt-get upgrade -y";
         }
-
         if ($this->mariadbClient) {
-            $string .= "RUN apt-get install mariadb-client -y\n";
+            $stringArray[] = "RUN apt-get install mariadb-client -y";
         }
-
         if ($this->mariadbServer) {
-            $string .= "RUN apt-get install mariadb-server -y\n";
+            $stringArray[] = "RUN apt-get install mariadb-server -y";
         }
+        if ($this->mysql) {
+            $stringArray[] = "RUN apt-get install mysql -y";
+        }
+        if (count($stringArray) > 2) {
+            $stringArray[] = "";
+        }
+        $stringArray[] = "CMD while : ; do sleep 1000; done";
 
-        $string .= "\nCMD while : ; do sleep 1000; done";
-
-        return $string;
+        return implode("\n", $stringArray);
     }
 
     public function setUpdate(): self
@@ -73,5 +77,10 @@ class DockerFile implements SpitterInterface
         }
         
         return $baseExplainString;
+    }
+
+    public function setMysql()
+    {
+        $this->mysql = true;
     }
 }

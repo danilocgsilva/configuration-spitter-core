@@ -21,6 +21,7 @@ class DebianReceipt implements ReceiptInterface
         "update",
         "upgrade",
         "add-maria-db-client-with-password",
+        "add-mysql",
         "mariadb-server-and-client",
         "port-redirection",
         "service-name"
@@ -47,6 +48,9 @@ class DebianReceipt implements ReceiptInterface
         }
         if ($property === "update") {
             $this->dockerFile->setUpdate();
+        }
+        if ($property === "mysql") {
+            $this->dockerFile->setMysql();
         }
         if ($property === "upgrade") {
             $this->dockerFile->setUpgrade();

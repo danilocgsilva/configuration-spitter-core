@@ -55,6 +55,20 @@ EOF;
         $this->assertSame($expectedString, $this->dockerFile->getString());
     }
 
+    public function testMysql(): void
+    {
+        $expectedString = <<<EOF
+FROM debian:bookworm-slim
+
+RUN apt-get install mysql -y
+
+CMD while : ; do sleep 1000; done
+EOF;
+        $this->dockerFile->setMysql();
+        
+        $this->assertSame($expectedString, $this->dockerFile->getString());
+    }
+
     public function testExplain(): void
     {
         $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.";
@@ -94,6 +108,41 @@ EOF;
             ->setUpgrade()
             ->setMariadbClient();
 
+        $this->assertSame($expectedString, $this->dockerFile->getString());
+    }
+
+    public function testSingleMariadbClient(): void
+    {
+        $expectedString = <<<EOF
+FROM debian:bookworm-slim
+
+RUN apt-get install mariadb-client -y
+
+CMD while : ; do sleep 1000; done
+EOF;
+        $this->dockerFile
+            ->setMariadbClient();
+
+        $this->assertSame($expectedString, $this->dockerFile->getString());
+    }
+
+    public function testMysqlWithUpdates(): void
+    {
+        $expectedString = <<<EOF
+FROM debian:bookworm-slim
+
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install mysql -y
+
+CMD while : ; do sleep 1000; done
+EOF;
+        $this
+            ->dockerFile
+            ->setUpdate()
+            ->setUpgrade()
+            ->setMysql();
+        
         $this->assertSame($expectedString, $this->dockerFile->getString());
     }
 
