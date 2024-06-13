@@ -40,6 +40,7 @@ class DebianReceipt extends AbstractReceipt implements ReceiptInterface
             "mariadb-server-and-client",
             "port-redirection",
             "service-name",
+            "mysql",
             "container-name"
         ];
     }
