@@ -12,5 +12,7 @@ interface ReceiptInterface
 
     public function get(): array;
 
+    public function setProperty(string $command);
+
     public static function getName(): string;
 }

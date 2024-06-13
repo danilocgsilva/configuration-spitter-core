@@ -100,4 +100,21 @@ EOF;
         $filesData = $this->mysqlReceipt->get();
         $this->assertSame($expectedFileData, $filesData['docker-compose.yml']);
     }
+
+    public function testGetParameters()
+    {
+        $expectedParameters = [
+            "port-redirect",
+            "password",
+            "container-name"
+        ];
+
+        $this->assertSame($expectedParameters, $this->mysqlReceipt->getParameters());
+    }
+
+    public function testGetName(): void
+    {
+        $expectedValue = "Mysql";
+        $this->assertSame($expectedValue, $this->mysqlReceipt->getName());
+    }
 }

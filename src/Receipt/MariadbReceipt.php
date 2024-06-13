@@ -8,31 +8,32 @@ use Danilocgsilva\ConfigurationSpitter\DockerCompose;
 use Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData;
 use Exception;
 
-class MariadbReceipt implements ReceiptInterface
+class MariadbReceipt extends AbstractReceipt implements ReceiptInterface
 {
-    private DockerCompose $dockerCompose;
-
-    private string $explanationString = "Raise a mariadb service.";
-
+    private array $explanationData = [
+        "Raise a mariadb service.",
+        "There's no port redirection setted yet - will use the 3306."
+    ];
+    
     public static function getName(): string
     {
         return "MariaDB";
     }
 
-    const PARAMETERS = [
-        "port-redirect",
-        "password"
-    ];
-
     public function __construct()
     {
         $this->dockerCompose = new DockerCompose();
         $this->dockerCompose->setServiceData(new MariadbServiceData(), 'mariadb');
+        $this->parameters = [
+            "port-redirect",
+            "password",
+            "container-name"
+        ];
     }
 
     public function explain(): string
     {
-        return $this->explanationString;
+        return implode("\n", $this->explanationData);
     }
 
     public function get(): array
@@ -42,32 +43,29 @@ class MariadbReceipt implements ReceiptInterface
         ];
     }
 
-    public function getParameters(): array
-    {
-        return self::PARAMETERS;
-    }
-
     public function setProperty(string $propertyWithParameter): self
     {
-        $propertyWithParameterArray = explode(":", $propertyWithParameter);
-        $property = $propertyWithParameterArray[0];
-        if (!in_array($property, self::PARAMETERS)) {
-            throw new Exception("The given property is not expected to be received.");
-        }
-        if (count($propertyWithParameterArray) === 2) {
-            $parameter = $propertyWithParameterArray[0];
+        $validations = $this->validateParameters($propertyWithParameter);
+        if ($validations['countTerms'] === 2) {
+            $parameter = $validations['property'];
             if ($parameter === "port-redirect") {
-                $portRedirection = (int) $propertyWithParameterArray[1];
+                $portRedirection = (int) $validations['argument'];
                 /** @var \Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData */
                 $mariadbServiceData = $this->dockerCompose->getServiceData();
                 $mariadbServiceData->setPortRedirection($portRedirection);
-                $this->explanationString .= "\nSetted the redirection from $portRedirection to 3306.";
+                unset($this->explanationData[1]);
+                $this->explanationData[] = "Setted the redirection from $portRedirection to 3306.";
             }
             if ($parameter === "password") {
-                $rootPassword = $propertyWithParameterArray[1];
+                $rootPassword = $validations['argument'];
                 /** @var \Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData */
                 $mariadbServiceData = $this->dockerCompose->getServiceData();
                 $mariadbServiceData->setRootPassword($rootPassword);
+            }
+            if ($parameter === "container-name") {
+                /** @var \Danilocgsilva\ConfigurationSpitter\ServicesData\MariadbServiceData */
+                $mariadbServiceData = $this->dockerCompose->getServiceData();
+                $mariadbServiceData->setContainerName($validations['argument']);
             }
         }
         return $this;

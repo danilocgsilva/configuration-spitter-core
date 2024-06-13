@@ -4,18 +4,14 @@ declare(strict_types=1);
 
 namespace Danilocgsilva\ConfigurationSpitter\Receipt;
 
-use Danilocgsilva\ConfigurationSpitter\DockerFile;
 use Danilocgsilva\ConfigurationSpitter\DockerCompose;
 use Danilocgsilva\ConfigurationSpitter\ServicesData\DebianServiceData;
+use Danilocgsilva\ConfigurationSpitter\DockerFile;
 use Exception;
 
-class DebianReceipt implements ReceiptInterface
+class DebianReceipt extends AbstractReceipt implements ReceiptInterface
 {
-    private DockerFile $dockerFile;
-
     private string $extraExplanationString = "";
-
-    private DockerCompose $dockerCompose;
 
     const PARAMETERS = [
         "update",
@@ -37,46 +33,52 @@ class DebianReceipt implements ReceiptInterface
         $this->dockerCompose = new DockerCompose();
         $this->dockerCompose->setServiceData(new DebianServiceData(), 'env');
         $this->dockerFile = new DockerFile();
+        $this->parameters = [
+            "update",
+            "upgrade",
+            "add-maria-db-client-with-password",
+            "mariadb-server-and-client",
+            "port-redirection",
+            "service-name",
+            "container-name"
+        ];
     }
-    
+
     public function setProperty(string $propertyWithParameter): self
     {
-        $propertyWithParameterArray = explode(":", $propertyWithParameter);
-        $property = $propertyWithParameterArray[0];
-        if (!in_array($property, self::PARAMETERS)) {
-            throw new Exception("The given property is not expected to be received.");
-        }
-        if ($property === "update") {
+        $validations = $this->validateParameters($propertyWithParameter);
+        if ($validations['property'] === "update") {
             $this->dockerFile->setUpdate();
         }
-        if ($property === "mysql") {
+        if ($validations['property'] === "mysql") {
             $this->dockerFile->setMysql();
         }
-        if ($property === "upgrade") {
+        if ($validations['property'] === "upgrade") {
             $this->dockerFile->setUpgrade();
         }
-        if (count($propertyWithParameterArray) === 2) {
-            $parameter = $propertyWithParameterArray[0];
-            $password = $propertyWithParameterArray[1];
-            if ($parameter === "add-maria-db-client-with-password") {
-                $this->dockerCompose->setMariaDb($password);
+        if ($validations['countTerms'] === 2) {
+            if ($validations['property'] === "add-maria-db-client-with-password") {
+                $this->dockerCompose->setMariaDb($validations['argument']);
             }
         }
-        if ($property === "mariadb-server-and-client") {
+        if ($validations['property'] === "mariadb-server-and-client") {
             $this->dockerFile->setMariaDbServer();
             $this->dockerFile->setMariaDbClient();
             $this->extraExplanationString .= "\nThe container will have mariadb server and client as well.";
         }
-        if ($property === "port-redirection") {
+        if ($validations['property'] === "port-redirection") {
             $this->dockerCompose->setPortRedirection(80, 80);
             $this->extraExplanationString .= "\nIt will have redirection from port 80 from host to 80 of container.";
         }
-        if ($property === "service-name") {
-            $this->dockerCompose->changeServiceName($propertyWithParameterArray[1]);
+        if ($validations['property'] === "service-name") {
+            $this->dockerCompose->changeServiceName($validations['argument']);
+        }
+        if ($validations['property'] === "container-name") {
+            $this->dockerCompose->setContainerName($validations['argument']);
         }
         return $this;
     }
-    
+
     public function get(): array
     {
         return [
@@ -92,20 +94,5 @@ class DebianReceipt implements ReceiptInterface
             $explanationString .= $this->extraExplanationString;
         }
         return $explanationString;
-    }
-
-    public function getDockerFileObject(): DockerFile
-    {
-        return $this->dockerFile;
-    }
-
-    public function getDockerComposeObject(): DockerCompose
-    {
-        return $this->dockerCompose;
-    }
-
-    public function getParameters(): array
-    {
-        return self::PARAMETERS;
     }
 }
