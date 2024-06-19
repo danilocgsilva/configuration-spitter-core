@@ -13,16 +13,6 @@ class DebianReceipt extends AbstractReceipt implements ReceiptInterface
 {
     private string $extraExplanationString = "";
 
-    const PARAMETERS = [
-        "update",
-        "upgrade",
-        "add-maria-db-client-with-password",
-        "add-mysql",
-        "mariadb-server-and-client",
-        "port-redirection",
-        "service-name"
-    ];
-
     public static function getName(): string
     {
         return "Debian";
