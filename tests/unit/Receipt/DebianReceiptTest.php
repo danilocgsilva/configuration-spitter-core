@@ -173,7 +173,6 @@ EOF;
     public function testSetPhpApacheAndDockerfileWithData(): void
     {
         $this->debianReceipt->setProperty("add-php-apache");
-        $dockerFile = $this->debianReceipt->getDockerFileObject();
         $expectedString = <<<EOF
 FROM debian:bookworm-slim
 
@@ -181,8 +180,26 @@ RUN apt-get install php -y
 
 CMD while : ; do sleep 1000; done
 EOF;
-        $dockerFile->setPhpApache();
 
+        $dockerFile = $this->debianReceipt->getDockerFileObject();
+
+        $this->assertSame($expectedString, $dockerFile->getString());
+    }
+
+    public function testSetFullPhpApacheDev(): void
+    {
+        $this->debianReceipt->setProperty("set-full-php-apache-dev");
+        $expectedString = <<<EOF
+FROM debian:bookworm-slim
+
+RUN apt-get install curl git zip -y
+RUN apt-get install php php-mysql php-xdebug php-curl php-zip php-xml -y
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+
+CMD while : ; do sleep 1000; done
+EOF;
+
+        $dockerFile = $this->debianReceipt->getDockerFileObject();
         $this->assertSame($expectedString, $dockerFile->getString());
     }
 }

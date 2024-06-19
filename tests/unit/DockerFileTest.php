@@ -65,7 +65,7 @@ RUN apt-get install mysql -y
 CMD while : ; do sleep 1000; done
 EOF;
         $this->dockerFile->setMysql();
-        
+
         $this->assertSame($expectedString, $this->dockerFile->getString());
     }
 
@@ -158,7 +158,7 @@ EOF;
             ->setUpdate()
             ->setUpgrade()
             ->setMysql();
-        
+
         $this->assertSame($expectedString, $this->dockerFile->getString());
     }
 
@@ -222,5 +222,64 @@ EOF;
         $expectedString .= "Installs php with Apache together as well.";
         $this->dockerFile->setPhpApache();
         $this->assertSame($expectedString, $this->dockerFile->explain());
+    }
+
+    public function testFullPhpApacheDev(): void
+    {
+        $this->dockerFile->setFullPhpApacheDev();
+        $expectedString = <<<EOF
+FROM debian:bookworm-slim
+
+RUN apt-get install curl git zip -y
+RUN apt-get install php php-mysql php-xdebug php-curl php-zip php-xml -y
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+
+CMD while : ; do sleep 1000; done
+EOF;
+
+        $this->assertSame($expectedString, $this->dockerFile->getString());
+    }
+
+    public function testFullPhpDevWithUpdates()
+    {
+        $expectedString = <<<EOF
+FROM debian:bookworm-slim
+
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install curl git zip -y
+RUN apt-get install php php-mysql php-xdebug php-curl php-zip php-xml -y
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+
+CMD while : ; do sleep 1000; done
+EOF;
+
+        $this->dockerFile
+            ->setUpdate()
+            ->setUpgrade()
+            ->setFullPhpApacheDev();
+
+        $this->assertSame($expectedString, $this->dockerFile->getString());
+    }
+
+    public function testExplainUpdateAndUpgrade(): void
+    {
+        $this->dockerFile
+            ->setUpdate()
+            ->setUpgrade();
+
+        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
+        $expectedExplanation .= "It also perform an update in the operational system repository, so packages can be installed through default operating system utility.\n";
+        $expectedExplanation .= "Will update operating system packages.";
+
+        $this->assertSame($expectedExplanation, $this->dockerFile->explain());
+    }
+
+    public function testExplainWithFullPhpApacheDev()
+    {
+        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";   
+        $expectedExplanation .= "Will prepare commons php applications for development porpouse, including the Apache web server and Composer.";
+        $this->dockerFile->setFullPhpApacheDev();
+        $this->assertSame($expectedExplanation, $this->dockerFile->explain());
     }
 }

@@ -42,7 +42,8 @@ class DebianReceipt extends AbstractReceipt implements ReceiptInterface
             "service-name",
             "mysql",
             "container-name",
-            "add-php-apache"
+            "add-php-apache",
+            "set-full-php-apache-dev"
         ];
     }
 
@@ -78,6 +79,12 @@ class DebianReceipt extends AbstractReceipt implements ReceiptInterface
         }
         if ($validations['property'] === "container-name") {
             $this->dockerCompose->setContainerName($validations['argument']);
+        }
+        if ($validations['property'] === "add-php-apache") {
+            $this->dockerFile->setPhpApache();
+        }
+        if ($validations['property'] === "set-full-php-apache-dev") {
+            $this->dockerFile->setFullPhpApacheDev();
         }
         return $this;
     }
