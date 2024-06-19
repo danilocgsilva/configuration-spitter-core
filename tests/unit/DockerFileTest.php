@@ -15,7 +15,7 @@ class DockerFileTest extends TestCase
     {
         $this->dockerFile = new DockerFile();
     }
-    
+
     public function testGetString(): void
     {
         $expectedString = <<<EOF
@@ -51,7 +51,7 @@ RUN apt-get upgrade -y
 CMD while : ; do sleep 1000; done
 EOF;
         $this->dockerFile->setUpdate()->setUpgrade();
-        
+
         $this->assertSame($expectedString, $this->dockerFile->getString());
     }
 
@@ -179,5 +179,48 @@ EOF;
             ->setMariadbServer();
 
         $this->assertSame($expectedString, $this->dockerFile->getString());
+    }
+
+    public function testPhpApache(): void
+    {
+        $expectedString = <<<EOF
+FROM debian:bookworm-slim
+
+RUN apt-get install php -y
+
+CMD while : ; do sleep 1000; done
+EOF;
+        $this->dockerFile
+            ->setPhpApache();
+
+        $this->assertSame($expectedString, $this->dockerFile->getString());
+    }
+
+
+    public function testPhpApacheWithDebianUpdates(): void
+    {
+        $expectedString = <<<EOF
+FROM debian:bookworm-slim
+
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install php -y
+
+CMD while : ; do sleep 1000; done
+EOF;
+        $this->dockerFile
+            ->setUpdate()
+            ->setUpgrade()
+            ->setPhpApache();
+
+        $this->assertSame($expectedString, $this->dockerFile->getString());
+    }
+
+    public function testExplainWithPhp(): void
+    {
+        $expectedString = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
+        $expectedString .= "Installs php with Apache together as well.";
+        $this->dockerFile->setPhpApache();
+        $this->assertSame($expectedString, $this->dockerFile->explain());
     }
 }

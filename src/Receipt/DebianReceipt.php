@@ -41,7 +41,8 @@ class DebianReceipt extends AbstractReceipt implements ReceiptInterface
             "port-redirection",
             "service-name",
             "mysql",
-            "container-name"
+            "container-name",
+            "add-php-apache"
         ];
     }
 

@@ -148,4 +148,41 @@ services:
 EOF;
         $this->assertSame($expectedString, $this->debianReceipt->getDockerComposeObject()->getString());
     }
+
+    public function testSetPhpApache(): void
+    {
+        $this->debianReceipt->setProperty("add-php-apache");
+
+        $expectedString = <<<EOF
+services:
+  env:
+    build:
+      context: .
+
+EOF;
+        $this->assertSame($expectedString, $this->debianReceipt->getDockerComposeObject()->getString());
+    }
+
+    public function testSetPhpApacheAndDockerfile(): void
+    {
+        $this->debianReceipt->setProperty("add-php-apache");
+        $dockerFile = $this->debianReceipt->getDockerFileObject();
+        $this->assertInstanceOf(DockerFile::class, $dockerFile);
+    }
+
+    public function testSetPhpApacheAndDockerfileWithData(): void
+    {
+        $this->debianReceipt->setProperty("add-php-apache");
+        $dockerFile = $this->debianReceipt->getDockerFileObject();
+        $expectedString = <<<EOF
+FROM debian:bookworm-slim
+
+RUN apt-get install php -y
+
+CMD while : ; do sleep 1000; done
+EOF;
+        $dockerFile->setPhpApache();
+
+        $this->assertSame($expectedString, $dockerFile->getString());
+    }
 }

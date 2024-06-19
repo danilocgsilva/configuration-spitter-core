@@ -19,11 +19,14 @@ class DockerFile implements SpitterInterface
     private bool $mariadbExplanationOff = false;
 
     private bool $mariadbServer = false;
+
+    private bool $phpApache = false;
     
     public function getString(): string
     {
         $stringArray = ["FROM debian:bookworm-slim"];
         $stringArray[] = "";
+
         if ($this->update) {
             $stringArray[] = "RUN apt-get update";
         }
@@ -39,9 +42,13 @@ class DockerFile implements SpitterInterface
         if ($this->mysql) {
             $stringArray[] = "RUN apt-get install mysql -y";
         }
+        if ($this->phpApache) {
+            $stringArray[] = "RUN apt-get install php -y";
+        }
         if (count($stringArray) > 2) {
             $stringArray[] = "";
         }
+        
         $stringArray[] = "CMD while : ; do sleep 1000; done";
 
         return implode("\n", $stringArray);
@@ -99,7 +106,16 @@ class DockerFile implements SpitterInterface
         if ($this->mariadbClient && !$this->mariadbExplanationOff) {
             $baseExplainString .= "\nThe Mariadb client will be added to the container.";
         }
+        if ($this->phpApache) {
+            $baseExplainString .= "\nInstalls php with Apache together as well.";
+        }
         
         return $baseExplainString;
+    }
+
+    public function setPhpApache(): self
+    {
+        $this->phpApache = true;
+        return $this;
     }
 }
