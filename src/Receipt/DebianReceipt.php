@@ -69,6 +69,7 @@ class DebianReceipt extends AbstractReceipt implements ReceiptInterface
         }
         if ($validations['property'] === "container-name") {
             $this->dockerCompose->setContainerName($validations['argument']);
+            $this->extraExplanationString .= sprintf("\nThe container name will be %s.", $validations['argument']);
         }
         if ($validations['property'] === "add-php-apache") {
             $this->dockerFile->setPhpApache();

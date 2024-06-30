@@ -61,6 +61,16 @@ class DebianReceiptTest extends TestCase
         $this->assertSame($expectedExplanation, $this->debianReceipt->explain());
     }
 
+    public function testExplainChangingContainerName(): void
+    {
+        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
+        $expectedExplanation .= "The container name will be my_renamed_container.";
+
+        $this->debianReceipt->setProperty("container-name:my_renamed_container");
+
+        $this->assertSame($expectedExplanation, $this->debianReceipt->explain());
+    }
+
     public function testPropertyassigment(): void
     {
         $this->debianReceipt
@@ -81,7 +91,7 @@ EOF;
         $this->assertSame($expectedString, $dockerFile->getString());
     }
 
-    public function testExplain(): void
+    public function testDefaultExplain(): void
     {
         $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.";
         $expectedExplanation .= "\nYou have defined no container name.";
