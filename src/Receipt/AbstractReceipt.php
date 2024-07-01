@@ -10,15 +10,28 @@ use Exception;
 
 abstract class AbstractReceipt
 {
+    public array $parameters;
+
     protected DockerFile $dockerFile;
 
     protected DockerCompose $dockerCompose;
 
-    public array $parameters;
+    protected string $containerName = "";
 
     public function getDockerFileObject(): DockerFile
     {
         return $this->dockerFile;
+    }
+
+    public function setContainerName(string $containerName): self
+    {
+        $this->containerName = $containerName;
+        return $this;
+    }
+
+    public function getContainerName(): string
+    {
+        return $this->containerName;
     }
 
     public function getDockerComposeObject(): DockerCompose

@@ -102,7 +102,6 @@ class DockerFile implements SpitterInterface
     public function explain(): string
     {   
         $baseExplainString = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.";
-        // $baseExplainString .= "\nYou have defined no container name.";
         if ($this->update) {
             $baseExplainString .= "\nIt also perform an update in the operational system repository, so packages can be installed through default operating system utility.";
         }

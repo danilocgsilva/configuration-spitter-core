@@ -44,8 +44,8 @@ class DebianReceiptTest extends TestCase
     public function testExplainWithUpdate(): void
     {
         $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
-        $expectedExplanation .= "You have defined no container name.\n";
         $expectedExplanation .= "It also perform an update in the operational system repository, so packages can be installed through default operating system utility.";
+        $expectedExplanation .= "\nYou have defined no container name.";
 
         $this->debianReceipt->setProperty("update");
         $this->assertSame($expectedExplanation, $this->debianReceipt->explain());
@@ -54,8 +54,8 @@ class DebianReceiptTest extends TestCase
     public function testExplainWithUpgrade(): void
     {
         $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
-        $expectedExplanation .= "You have defined no container name.\n";
-        $expectedExplanation .= "Will update operating system packages.";
+        $expectedExplanation .= "Will update operating system packages.\n";
+        $expectedExplanation .= "You have defined no container name.";
 
         $this->debianReceipt->setProperty("upgrade");
         $this->assertSame($expectedExplanation, $this->debianReceipt->explain());
@@ -130,8 +130,8 @@ EOF;
         $this->debianReceipt->setProperty("mariadb-server-and-client");
 
         $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.";
-        $expectedExplanation .= "\nYou have defined no container name.";
         $expectedExplanation .= "\nThe container will have mariadb server and client as well.";
+        $expectedExplanation .= "\nYou have defined no container name.";
 
         $this->assertSame($expectedExplanation, $this->debianReceipt->explain());
     }

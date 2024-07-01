@@ -71,15 +71,13 @@ EOF;
 
     public function testExplain(): void
     {
-        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
-        $expectedExplanation .= "You have defined no container name.";
+        $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.";
         $this->assertSame($expectedExplanation, $this->dockerFile->explain());
     }
 
     public function testExplainWithUpdate(): void
     {
         $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
-        $expectedExplanation .= "You have defined no container name.\n";
         $expectedExplanation .= "It also perform an update in the operational system repository, so packages can be installed through default operating system utility.";
         $this->dockerFile->setUpdate();
         $this->assertSame($expectedExplanation, $this->dockerFile->explain());
@@ -88,7 +86,6 @@ EOF;
     public function testExplainWithUpgrade(): void
     {
         $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
-        $expectedExplanation .= "You have defined no container name.\n";
         $expectedExplanation .= "Will update operating system packages.";
 
         $this->dockerFile->setUpgrade();
@@ -98,7 +95,6 @@ EOF;
     public function testExplainMysql(): void
     {
         $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
-        $expectedExplanation .= "You have defined no container name.\n";
         $expectedExplanation .= "The container will be shipped with mysql.";
         $this->dockerFile->setMysql();
         $this->assertSame($expectedExplanation, $this->dockerFile->explain());
@@ -107,7 +103,6 @@ EOF;
     public function testExplainMariadbclient(): void
     {
         $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
-        $expectedExplanation .= "You have defined no container name.\n";
         $expectedExplanation .= "The Mariadb client will be added to the container.";
         $this->dockerFile->setMariadbClient();
         $this->assertSame($expectedExplanation, $this->dockerFile->explain());
@@ -224,7 +219,6 @@ EOF;
     public function testExplainWithPhp(): void
     {
         $expectedString = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
-        $expectedString .= "You have defined no container name.\n";
         $expectedString .= "Installs php with Apache together as well.";
         $this->dockerFile->setPhpApache();
         $this->assertSame($expectedString, $this->dockerFile->explain());
@@ -275,17 +269,15 @@ EOF;
             ->setUpgrade();
 
         $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";
-        $expectedExplanation .= "You have defined no container name.\n";
         $expectedExplanation .= "It also perform an update in the operational system repository, so packages can be installed through default operating system utility.\n";
         $expectedExplanation .= "Will update operating system packages.";
 
         $this->assertSame($expectedExplanation, $this->dockerFile->explain());
     }
 
-    public function testExplainWithFullPhpApacheDev()
+    public function testExplainWithFullPhpApacheDev(): void
     {
         $expectedExplanation = "Creates a container based on the slim version of the Debian Bookworm that sleep indefinitely. Good for debugging, development or as resource placeholder.\n";   
-        $expectedExplanation .= "You have defined no container name.\n";   
         $expectedExplanation .= "Will prepare commons php applications for development porpouse, including the Apache web server and Composer.";
         $this->dockerFile->setFullPhpApacheDev();
         $this->assertSame($expectedExplanation, $this->dockerFile->explain());
