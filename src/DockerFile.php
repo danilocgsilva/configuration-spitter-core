@@ -49,7 +49,7 @@ class DockerFile implements SpitterInterface
         }
         if ($this->fullPhpApacheDev) {
             $stringArray[] = "RUN apt-get install curl git zip -y";
-            $stringArray[] = "RUN apt-get install php php-mysql php-xdebug php-curl php-zip php-xml -y";
+            $stringArray[] = "RUN apt-get install php php-mysql php-xdebug php-curl php-zip php-xml php-mbstring -y";
             $stringArray[] = "RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer";
         }
         if (count($stringArray) > 2) {
