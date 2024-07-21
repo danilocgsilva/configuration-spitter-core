@@ -7,11 +7,14 @@ namespace Danilocgsilva\ConfigurationSpitter\Receipt;
 use Danilocgsilva\ConfigurationSpitter\DockerCompose;
 use Danilocgsilva\ConfigurationSpitter\ServicesData\DebianServiceData;
 use Danilocgsilva\ConfigurationSpitter\DockerFile;
+use Danilocgsilva\ConfigurationSpitter\XDebugFileReceipt;
 use Exception;
 
 class DebianReceipt extends AbstractReceipt implements ReceiptInterface
 {
     private string $extraExplanationString = "";
+
+    private array $files = [];
 
     public static function getName(): string
     {
@@ -77,16 +80,24 @@ class DebianReceipt extends AbstractReceipt implements ReceiptInterface
         }
         if ($validations['property'] === "set-full-php-apache-dev") {
             $this->dockerFile->setFullPhpApacheDev();
+
+            $xDebugFileReceipt = new XDebugFileReceipt();
+            $filePath = $xDebugFileReceipt->getPathName();
+            $fileContent = $xDebugFileReceipt->getContent();
+
+            $this->files[$filePath] = $fileContent;
         }
+
+        $this->ensureDefaultFiles();
+
         return $this;
     }
 
     public function get(): array
     {
-        return [
-            "docker-compose.yml" => $this->dockerCompose->getString(),
-            "DockerFile" => $this->dockerFile->getString()
-        ];
+        $this->ensureDefaultFiles();
+
+        return $this->files;
     }
 
     public function explain(): string
@@ -99,5 +110,16 @@ class DebianReceipt extends AbstractReceipt implements ReceiptInterface
             $explanationString .= "\nYou have defined no container name.";
         }
         return $explanationString;
+    }
+
+    private function ensureDefaultFiles(): void
+    {
+        if (
+            !isset($this->files["docker-compose.yml"]) &&
+            !isset($this->files["DockerFile"])
+        ) {
+            $this->files["docker-compose.yml"] = $this->dockerCompose->getString();
+            $this->files["DockerFile"] = $this->dockerFile->getString();
+        }
     }
 }
