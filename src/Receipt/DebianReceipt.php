@@ -87,14 +87,14 @@ class DebianReceipt extends AbstractReceipt implements ReceiptInterface
             $this->files[$filePath] = $fileContent;
         }
 
-        $this->ensureDefaultFiles();
+        $this->updateReceipt();
 
         return $this;
     }
 
     public function get(): array
     {
-        $this->ensureDefaultFiles();
+        $this->updateReceipt();
 
         return $this->files;
     }
@@ -111,14 +111,9 @@ class DebianReceipt extends AbstractReceipt implements ReceiptInterface
         return $explanationString;
     }
 
-    private function ensureDefaultFiles(): void
+    private function updateReceipt(): void
     {
-        if (
-            !isset($this->files["docker-compose.yml"]) &&
-            !isset($this->files["DockerFile"])
-        ) {
-            $this->files["docker-compose.yml"] = $this->dockerCompose->getString();
-            $this->files["DockerFile"] = $this->dockerFile->getString();
-        }
+        $this->files["docker-compose.yml"] = $this->dockerCompose->getString();
+        $this->files["DockerFile"] = $this->dockerFile->getString();
     }
 }
