@@ -87,8 +87,6 @@ class DebianReceipt extends AbstractReceipt implements ReceiptInterface
             $this->files[$filePath] = $fileContent;
         }
 
-        $this->updateReceipt();
-
         return $this;
     }
 
