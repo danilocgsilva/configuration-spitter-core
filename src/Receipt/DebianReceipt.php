@@ -8,7 +8,6 @@ use Danilocgsilva\ConfigurationSpitter\DockerCompose;
 use Danilocgsilva\ConfigurationSpitter\ServicesData\DebianServiceData;
 use Danilocgsilva\ConfigurationSpitter\DockerFile;
 use Danilocgsilva\ConfigurationSpitter\XDebugFileReceipt;
-use Exception;
 
 class DebianReceipt extends AbstractReceipt implements ReceiptInterface
 {
