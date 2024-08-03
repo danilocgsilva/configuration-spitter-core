@@ -112,6 +112,6 @@ class DebianReceipt extends AbstractReceipt implements ReceiptInterface
     private function updateReceipt(): void
     {
         $this->files["docker-compose.yml"] = $this->dockerCompose->getString();
-        $this->files["DockerFile"] = $this->dockerFile->getString();
+        $this->files["Dockerfile"] = $this->dockerFile->getString();
     }
 }

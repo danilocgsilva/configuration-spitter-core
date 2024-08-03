@@ -32,7 +32,7 @@ class DebianReceiptTest extends TestCase
 
         $this->assertSame(
             $dockerFile->getString(),
-            $receiptData['DockerFile']
+            $receiptData['Dockerfile']
         );
 
         $this->assertSame(
@@ -269,8 +269,7 @@ COPY config/20-xdebug.ini /etc/php/8.2/apache2/conf.d/
 CMD while : ; do sleep 1000; done
 EOF;
 
-        // $dockerFile = $this->debianReceipt->getDockerFileObject();
         $receipt = $this->debianReceipt->get();
-        $this->assertSame($expectedString, $receipt["DockerFile"]);
+        $this->assertSame($expectedString, $receipt["Dockerfile"]);
     }
 }
