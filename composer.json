@@ -2,6 +2,7 @@
     "name": "danilocgsilva/configuration_spitter",
     "description": "Returns receipts or configuration script",
     "type": "library",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Danilocgsilva\\ConfigurationSpitter\\": "src/"
