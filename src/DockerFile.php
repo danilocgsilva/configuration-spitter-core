@@ -51,7 +51,7 @@ class DockerFile implements SpitterInterface
             $stringArray[] = "RUN apt-get install curl git zip -y";
             $stringArray[] = "RUN apt-get install php php-mysql php-xdebug php-curl php-zip php-xml php-mbstring -y";
             $stringArray[] = "RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer";
-            $stringArray[] = "COPY config/20-xdebug.ini /etc/php/8.2/apache2/conf.d/";
+            $stringArray[] = "COPY config/xdebug.ini /etc/php/8.2/mods-available/";
         }
         if (count($stringArray) > 2) {
             $stringArray[] = "";

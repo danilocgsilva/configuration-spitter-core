@@ -6,7 +6,7 @@ namespace Danilocgsilva\ConfigurationSpitter;
 
 class XDebugFileReceipt
 {
-    private string $pathName = "config/20-xdebug.ini";
+    private string $pathName = "config/xdebug.ini";
 
     private string $content = <<<EOF
 zend_extension=xdebug.so
