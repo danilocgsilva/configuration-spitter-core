@@ -20,6 +20,11 @@ class DebianReceiptTest extends TestCase
         $this->debianReceipt = new DebianReceipt();
     }
 
+    public function testPython()
+    {
+        $dockerFile = new DockerFile();
+    }
+
     public function testGet(): void
     {
         $dockerFile = new DockerFile();

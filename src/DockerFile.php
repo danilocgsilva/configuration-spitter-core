@@ -23,6 +23,8 @@ class DockerFile implements SpitterInterface
     private bool $phpApache = false;
 
     private bool $fullPhpApacheDev = false;
+
+    private bool $python = false;
     
     public function getString(): string
     {
@@ -53,6 +55,9 @@ class DockerFile implements SpitterInterface
             $stringArray[] = "RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer";
             $stringArray[] = "COPY config/xdebug.ini /etc/php/8.2/mods-available/";
         }
+        if ($this->python) {
+            $stringArray[] = "RUN apt-get install python -y";
+        }
         if (count($stringArray) > 2) {
             $stringArray[] = "";
         }
@@ -60,6 +65,12 @@ class DockerFile implements SpitterInterface
         $stringArray[] = "CMD while : ; do sleep 1000; done";
 
         return implode("\n", $stringArray);
+    }
+
+    public function setPython(): self
+    {
+        $this->python = true;
+        return $this;
     }
 
     public function setUpdate(): self

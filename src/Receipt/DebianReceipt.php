@@ -35,7 +35,8 @@ class DebianReceipt extends AbstractReceipt implements ReceiptInterface
             "mysql",
             "container-name",
             "add-php-apache",
-            "set-full-php-apache-dev"
+            "set-full-php-apache-dev",
+            "python"
         ];
     }
 
@@ -85,6 +86,9 @@ class DebianReceipt extends AbstractReceipt implements ReceiptInterface
             $fileContent = $xDebugFileReceipt->getContent();
 
             $this->files[$filePath] = $fileContent;
+        }
+        if ($validations['property'] === "python") {
+            $this->dockerFile->setPython();
         }
 
         return $this;
