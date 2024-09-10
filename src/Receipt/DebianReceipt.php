@@ -94,6 +94,12 @@ class DebianReceipt extends AbstractReceipt implements ReceiptInterface
         return $this;
     }
 
+    public function onAppFolder(): self
+    {
+        $this->dockerCompose->onAppFolder();
+        return $this;
+    }
+
     public function get(): array
     {
         $this->updateReceipt();

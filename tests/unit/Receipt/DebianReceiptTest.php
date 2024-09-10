@@ -277,4 +277,25 @@ EOF;
         $receipt = $this->debianReceipt->get();
         $this->assertSame($expectedString, $receipt["Dockerfile"]);
     }
+
+    public function testAppFolder()
+    {
+        $this->debianReceipt->onAppFolder();
+
+        /** @var \Danilocgsilva\ConfigurationSpitter\DockerCompose $dockerCompose */
+        $dockerCompose = $this->debianReceipt->getDockerComposeObject();
+
+        $expectedString = <<<EOF
+services:
+  env:
+    build:
+      context: .
+    volumes:
+      - './app:/app'
+
+EOF;
+
+
+        $this->assertSame($expectedString, $this->debianReceipt->getDockerComposeObject()->getString());
+    }
 }

@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Danilocgsilva\ConfigurationSpitter\ServicesData;
 
-class NodeServiceData implements ServiceDataInterface
+class NodeServiceData extends AbstractServiceData implements ServiceDataInterface
 {
-    public function getData(): array
+    public function __construct()
     {
-        return [
+        $this->data = [
             'image' => 'node:latest'
         ];
+    }
+
+    public function getData(): array
+    {
+        return $this->data;
     }
 }

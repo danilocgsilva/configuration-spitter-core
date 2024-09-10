@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Danilocgsilva\ConfigurationSpitter\ServicesData;
 
-class MariadbServiceData implements ServiceDataInterface
+class MariadbServiceData extends AbstractServiceData implements ServiceDataInterface
 {
-    private array $data;
-
     public function __construct()
     {
         $this->data = [

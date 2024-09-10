@@ -34,6 +34,9 @@ abstract class AbstractReceipt
         return $this->containerName;
     }
 
+    /**
+     * @return \Danilocgsilva\ConfigurationSpitter\DockerCompose
+     */
     public function getDockerComposeObject(): DockerCompose
     {
         return $this->dockerCompose;

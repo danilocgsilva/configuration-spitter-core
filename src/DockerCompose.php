@@ -17,6 +17,14 @@ class DockerCompose implements SpitterInterface
 
     private string $serviceName;
 
+    protected bool $appFolder = false;
+
+    public function onAppFolder(): self
+    {
+        $this->appFolder = true;
+        return $this;
+    }
+
     public function setServiceData(ServiceDataInterface $serviceData, string $serviceName)
     {
         $this->serviceData = $serviceData;
@@ -76,6 +84,10 @@ class DockerCompose implements SpitterInterface
                 $this->serviceName => $this->serviceData->getData()
             ]
         ];
+
+        if ($this->appFolder) {
+            $this->dataArray['services'][$this->serviceName]['volumes'][] = "./app:/app";
+        }
     }
 
     private function exceptIfMissingDataService(): void
